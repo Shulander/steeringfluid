@@ -37,7 +37,7 @@ void Actor::update(double time_elapsed, Vec3 targetPos, int steeringType)
       Vec3 tmp(vel);   
       tmp.normalize();
       dir  = tmp;
-      lado = dir.perp();
+//      lado = dir.perp();
    }
 }
 
@@ -71,9 +71,21 @@ void Actor::render()
    glEnd();     
 
    //calcula o angulo do personagem
-   Vec3 vet(0,1);
-   float ang = dir.angle(vet);
-   ang *= (180/3.14);
+   //Vec3 vet(0,1,0);
+   //float ang = dir.angle(vet);
+   //ang *= (180/3.14);
+
+
+   //calcula o angulo do personagem
+   Vec3 up;
+   up.cross(dir, steeringForce);
+   up.normalize();
+   Vec3 side;
+   side.cross(dir, up);
+   side.normalize();
+
+   float ang;
+   up.
 
    //desenha o actor
    glColor3d(0, 1, 0);

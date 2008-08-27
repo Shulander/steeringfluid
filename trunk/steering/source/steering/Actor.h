@@ -16,9 +16,9 @@ class Actor
 
 public:
    Vec3 pos,  //posicao
-           dir,  //direcao
-           lado, //vetor perperndicular a direcao
-           vel;  //velocidade
+       dir,  //direcao
+//       lado, //vetor perperndicular a direcao
+       vel;  //velocidade
 
    Vec3 steeringForce;
 
