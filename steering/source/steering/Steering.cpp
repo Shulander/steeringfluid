@@ -15,15 +15,15 @@ Steering::Steering()
    
    //create a vector to a target position on the wander circle
    double theta = -0.5; //valor aleatorio
-   wanderTarget.set(wanderRadius * cos(theta),  wanderRadius * sin(theta)); 
+   wanderTarget.set(wanderRadius * cos(theta),  wanderRadius * sin(theta),  wanderRadius * sin(theta)); 
    
    //define o muro
-   wall[0].set(200,200);
-   wall[1].set(300,300);
-   Vec3 t(wall[0]-wall[1]);
-   t = t.perp();
+   wall[0].set(200,200,200);
+   wall[1].set(300,300,300);
+   Vec3 t;
+   t.cross(wall[0],wall[1]);
    t.normalize();
-   wall[2].set(t); //vetor perpendicular
+   wall[2] = (t); //vetor perpendicular
 }
    
 Vec3 Steering::calculateSteering(Actor *actor, Vec3 targetPos, int type)
@@ -69,9 +69,10 @@ Vec3 Steering::seek(Actor *actor, Vec3 targetPos)
 Vec3 Steering::flee(Actor *actor, Vec3 targetPos)
 {
    double panicDistance = 100;
-   if( actor->pos.distance(targetPos) > panicDistance )
+
+   if( Vec3::distance(actor->pos, targetPos)/*actor->pos.distance(targetPos)*/ > panicDistance )
    {
-     return Vec3(0,0);
+     return Vec3(0,0,0);
    }
    Vec3 desiredVelocity;
    desiredVelocity = actor->pos - targetPos;
@@ -119,7 +120,8 @@ Vec3 Steering::wander(Actor *actor)
    double JitterThisTimeSlice = wanderJitter * actor->timeElapsed * 9;
 
    Vec3 tmp(randomClamped() * JitterThisTimeSlice,
-               randomClamped() * JitterThisTimeSlice);
+	   randomClamped() * JitterThisTimeSlice,
+	   randomClamped() * JitterThisTimeSlice);
    
    printf("\n\n J= %lf", JitterThisTimeSlice);
    wanderTarget.print();
@@ -157,28 +159,28 @@ Vec3 Steering::wallAvoidance(Actor *actor)
    //examine each feeler in turn
    for (int i=0; i<3; i++)
    {
-      if (LineIntersection2D(actor->pos, antenas[i], wall[0], wall[1], distance, point))
-      {
-         //calculate by what distance the projected position of the agent
-         //will overshoot the wall
-         Vec3 OverShoot = antenas[i] - point;
+     // if (LineIntersection2D(actor->pos, antenas[i], wall[0], wall[1], distance, point))
+     // {
+     //    //calculate by what distance the projected position of the agent
+     //    //will overshoot the wall
+     //    Vec3 OverShoot = antenas[i] - point;
 
-         //create a force in the direction of the wall normal, with a 
-         //magnitude of the overshoot
-         //normal[2] eh a normal da parede definida por [ wall[0], wall[1] ]
-         SteeringForce = wall[2] * OverShoot.lengthSquared();
-         
-         //determina a direcao da forca em funcao da posicao relativa do muro e do actor
-         Vec3 v1(wall[0] - wall[1]);
-         Vec3 v2(wall[0] - actor->pos);
-         int side = v1.side(v2);
-         
-         //printf("\nColidiu lado %d antena %d ", side, i);
-         if( side == -1 )
-            return SteeringForce;
-         else
-            return SteeringForce.reverse();
-     }
+     //    //create a force in the direction of the wall normal, with a 
+     //    //magnitude of the overshoot
+     //    //normal[2] eh a normal da parede definida por [ wall[0], wall[1] ]
+     //    SteeringForce = wall[2] * OverShoot.lengthSquared();
+     //    
+     //    //determina a direcao da forca em funcao da posicao relativa do muro e do actor
+     //    Vec3 v1(wall[0] - wall[1]);
+     //    Vec3 v2(wall[0] - actor->pos);
+     //    int side = v1.side(v2);
+     //    
+     //    //printf("\nColidiu lado %d antena %d ", side, i);
+     //    if( side == -1 )
+     //       return SteeringForce;
+     //    else
+     //       return SteeringForce.reverse();
+     //}
   }//next feeler
 
   return SteeringForce;
@@ -216,8 +218,8 @@ void Steering::render(Actor *actor)
    glPushMatrix();
    glLoadIdentity();
    glBegin(GL_LINES);
-      glVertex3d(wall[0].x, wall[0].y);
-      glVertex3d(wall[1].x, wall[1].y);
+      glVertex3d(wall[0].x, wall[0].y, wall[0].z);
+      glVertex3d(wall[1].x, wall[1].y, wall[1].z);
    glEnd();     
   
    //desenha as antenas
@@ -272,11 +274,13 @@ void Steering::createFeelers(Actor *actor)
 
   //feeler to left
   Vec3 temp = actor->dir;
-  temp.rotate(3.14/4.0); //45 graus
+  temp.rotateAboutGlobalY(3.14/4.0);
+//  temp.rotate(3.14/4.0); //45 graus
   antenas[1] = actor->pos + (temp*wallDetectionFeelerLength/2.0f);
 
   //feeler to right
   temp = actor->dir;
-  temp.rotate(-3.14/4.0); //45 graus
+  temp.rotateAboutGlobalY(-3.14/4.0);
+//  temp.rotate(-3.14/4.0); //45 graus
   antenas[2] = actor->pos + (temp*wallDetectionFeelerLength/2.0f);
 }

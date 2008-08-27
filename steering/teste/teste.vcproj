@@ -205,7 +205,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\base\Vec3.h"
+				RelativePath="..\source\base\Vec3.hpp"
 				>
 			</File>
 		</Filter>

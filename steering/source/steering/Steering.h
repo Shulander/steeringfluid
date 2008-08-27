@@ -8,18 +8,18 @@
 #define WANDER  3
 #define PURSUIT 4
 
-#include "Vec3.h"
-#include "utils.h"
+#include "../base/Vec3.hpp"
 
 class Actor;
 
 class Steering
 {
+private:
    //usado no comportametno Wander
-   Vec3     wanderTarget; 
    float       wanderJitter;
    float       wanderRadius;
    float       wanderDistance;
+   Vec3     wanderTarget; 
    
    //usado no comportamento WallAvoidance
    Vec3 antenas[3];
