@@ -7,7 +7,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "Steering.h"
-#include <gl/glut.h>
+#include <GL/glut.h>
 
 
 //OBS: por questoes de simplicidade, todos os atributos sao publicos. 

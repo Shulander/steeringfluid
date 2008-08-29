@@ -7,8 +7,8 @@
 #include <GL/glut.h>
 
 
-#include "Frames.h"
-#include "GLFont.h"
+#include "base/Frames.h"
+#include "base/GLFont.h"
 
 GLFont	* font;
 Frames  * frames;

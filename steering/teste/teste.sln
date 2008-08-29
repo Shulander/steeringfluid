@@ -1,7 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "teste", "teste.vcproj", "{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SteeringLibrary", "teste.vcproj", "{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testeSteering", "..\testeSteering\testeSteering.vcproj", "{E7CC3591-C7ED-4FF5-9DF7-70F5769EA7A9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE} = {34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DisplayList", "..\DisplayList\DisplayList.vcproj", "{9DCCF3CB-6848-43C3-ADB4-9DE4215D0359}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE} = {34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +23,14 @@ Global
 		{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}.Debug|Win32.Build.0 = Debug|Win32
 		{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}.Release|Win32.ActiveCfg = Release|Win32
 		{34FB3DDF-4493-4C64-9925-8FEE15A5C2FE}.Release|Win32.Build.0 = Release|Win32
+		{E7CC3591-C7ED-4FF5-9DF7-70F5769EA7A9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E7CC3591-C7ED-4FF5-9DF7-70F5769EA7A9}.Debug|Win32.Build.0 = Debug|Win32
+		{E7CC3591-C7ED-4FF5-9DF7-70F5769EA7A9}.Release|Win32.ActiveCfg = Release|Win32
+		{E7CC3591-C7ED-4FF5-9DF7-70F5769EA7A9}.Release|Win32.Build.0 = Release|Win32
+		{9DCCF3CB-6848-43C3-ADB4-9DE4215D0359}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9DCCF3CB-6848-43C3-ADB4-9DE4215D0359}.Debug|Win32.Build.0 = Debug|Win32
+		{9DCCF3CB-6848-43C3-ADB4-9DE4215D0359}.Release|Win32.ActiveCfg = Release|Win32
+		{9DCCF3CB-6848-43C3-ADB4-9DE4215D0359}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

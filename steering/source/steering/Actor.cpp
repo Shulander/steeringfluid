@@ -84,12 +84,9 @@ void Actor::render()
    side.cross(dir, up);
    side.normalize();
 
-   float ang;
-   up.
-
    //desenha o actor
-   glColor3d(0, 1, 0);
-   glRotatef(-ang, 0, 0, 1);
+   glColor3f(0.0f, 1.0f, 0.0f);
+//   glRotatef(-ang, 0, 0, 1);
    glBegin(GL_TRIANGLES);
       glVertex3d(-5, -5, 0);
       glVertex3d(5, -5, 0);
