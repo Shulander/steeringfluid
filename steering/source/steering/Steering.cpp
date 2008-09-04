@@ -22,7 +22,7 @@ Steering::Steering()
    wall[1].set(300,300,300);
    Vec3 t;
    t.cross(wall[0],wall[1]);
-   t.normalize();
+   t=t.normalize();
    wall[2] = (t); //vetor perpendicular
 }
    
@@ -59,7 +59,7 @@ Vec3 Steering::seek(Actor *actor, Vec3 targetPos)
 {
    Vec3 desiredVelocity;
    desiredVelocity = targetPos - actor->pos;
-   desiredVelocity.normalize();
+   desiredVelocity=desiredVelocity.normalize();
    desiredVelocity *= actor->maxVel;
 
    return (desiredVelocity - actor->vel);
@@ -76,7 +76,7 @@ Vec3 Steering::flee(Actor *actor, Vec3 targetPos)
    }
    Vec3 desiredVelocity;
    desiredVelocity = actor->pos - targetPos;
-   desiredVelocity.normalize();
+   desiredVelocity=desiredVelocity.normalize();
    desiredVelocity *= actor->maxVel;
 
    return (desiredVelocity - actor->vel);
@@ -131,7 +131,7 @@ Vec3 Steering::wander(Actor *actor)
    wanderTarget += tmp;
 
    //reproject this new vector back on to a unit circle
-   wanderTarget.normalize();
+   wanderTarget=wanderTarget.normalize();
 
    //increase the length of the vector to the same as the radius
    //of the wander circle
