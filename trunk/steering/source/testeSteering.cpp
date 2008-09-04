@@ -88,6 +88,9 @@ void display(void)
 {
 	float frame_time;
 
+	glLoadIdentity();
+	system("cls");
+
 	t2 = clock();
 	frame_time  = (double)(t2 - t1) / CLOCKS_PER_SEC;
 	t1 = t2;
@@ -117,7 +120,6 @@ void display(void)
 
 	glPopMatrix(); // Posição da Luz
 
-
 	printf("                 \r", fps);
 	printf("FPS: %.0f\t frame_time: %.8f\r", fps, frame_time);
 
@@ -130,8 +132,10 @@ void display(void)
 	//font->endText(); 
 
 
+	//Sleep(50);
 	//ator->update(frame_time, Vec3(1,0,0), WANDER);
-	//ator->pos.sphericalWrapAround(Vec3(0,0,0), 20);
+	//ator->pos=ator->pos.sphericalWrapAround(Vec3(0,0,0), 5);
+	//ator->pos.print();
 
 	//glPushMatrix();
 	//ator->render();
@@ -164,7 +168,7 @@ void reshape (int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//	gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	gluLookAt( 10, 10, 10, 0, 0, 0, 0, 1, 0 );
+	gluLookAt( 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 }
 

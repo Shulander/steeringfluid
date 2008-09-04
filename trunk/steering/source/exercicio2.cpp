@@ -260,8 +260,8 @@ void reshape (int w, int h)
 	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-//	gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	gluLookAt( 10, 10, 10, 0, 0, 0, 0, 1, 0 );
+	//	gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	gluLookAt (0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 }
 

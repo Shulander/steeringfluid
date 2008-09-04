@@ -4,10 +4,10 @@ Actor::Actor()
 {
    massa       = 0.4;
    timeElapsed = 0;
-   maxVel      = 150;
+   maxVel      = 15;
    maxForca    = 2;
    
-   pos.set(200,200,200);
+   pos.set(0,0,0);
    vel.set(0,0,0);
    steeringForce.set(0,0,0);
 
@@ -35,7 +35,7 @@ void Actor::update(double time_elapsed, Vec3 targetPos, int steeringType)
    if (vel.lengthSquared() > 0.00000001)
    {    
       Vec3 tmp(vel);   
-      tmp.normalize();
+      tmp=tmp.normalize();
       dir  = tmp;
 //      lado = dir.perp();
    }
@@ -79,13 +79,16 @@ void Actor::render()
    //calcula o angulo do personagem
    Vec3 up;
    up.cross(dir, steeringForce);
-   up.normalize();
+   up=up.normalize();
    Vec3 side;
    side.cross(dir, up);
-   side.normalize();
+   side=side.normalize();
 
    //desenha o actor
    glColor3f(0.0f, 1.0f, 0.0f);
+   
+	//GLUquadric quad;
+	//gluSphere(&quad, 1.0f, 16, 16);
 //   glRotatef(-ang, 0, 0, 1);
    glBegin(GL_TRIANGLES);
       glVertex3d(-5, -5, 0);
