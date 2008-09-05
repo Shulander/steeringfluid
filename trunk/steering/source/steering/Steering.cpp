@@ -1,5 +1,3 @@
-
-
 #include "Actor.h"
 #include "Steering.h"
 #include <math.h>
@@ -7,9 +5,9 @@
 
 Steering::Steering()
 {
-   wanderJitter   = 80.0;
-   wanderRadius   = 30.0;
-   wanderDistance = 40.0;
+   wanderJitter   = 10.0; // nervosismo ;)
+   wanderRadius   = 10.0;
+   wanderDistance = 13.0;
 
    wallDetectionFeelerLength = 100;
    
@@ -24,6 +22,8 @@ Steering::Steering()
    t.cross(wall[0],wall[1]);
    t=t.normalize();
    wall[2] = (t); //vetor perpendicular
+
+//   quadratic=gluNewQuadric();
 }
    
 Vec3 Steering::calculateSteering(Actor *actor, Vec3 targetPos, int type)
@@ -203,13 +203,14 @@ void Steering::render(Actor *actor)
       glPushMatrix();
       glColor3f(1,0,0);
       glTranslated(target.x, target.y, target.z);
-      drawCircle(wanderRadius);
+      drawSphere(wanderRadius);
       glPopMatrix();
       
       //desenha o target
       glPushMatrix();
       glTranslated(wTarget.x, wTarget.y, wTarget.z);
-      drawCircle(4);
+	  glColor3f(1,0.6,0);
+      drawSphere(4);
       glPopMatrix();
    }
    
@@ -223,36 +224,27 @@ void Steering::render(Actor *actor)
    glEnd();     
   
    //desenha as antenas
-   glColor3f(1,0,0);
-   glPushMatrix();
-   glLoadIdentity();
-   glTranslatef(actor->pos.x, actor->pos.y, actor->pos.z);
-   glBegin(GL_LINES);
-      for(int i=0; i<3; i++)
-      {
-         Vec3 tmp(antenas[i]);
-         tmp -= actor->pos;
-         glVertex3d(0, 0, 0);
-         glVertex3d(tmp.x, tmp.y, tmp.z);
-      }
-   glEnd();     
+   //glColor3f(1,0,0);
+   //glPushMatrix();
+   //glLoadIdentity();
+   //glTranslatef(actor->pos.x, actor->pos.y, actor->pos.z);
+   //glBegin(GL_LINES);
+   //   for(int i=0; i<3; i++)
+   //   {
+   //      Vec3 tmp(antenas[i]);
+   //      tmp -= actor->pos;
+   //      glVertex3d(0, 0, 0);
+   //      glVertex3d(tmp.x, tmp.y, tmp.z);
+   //   }
+   //glEnd();  
+   //glPopMatrix();
    glPopMatrix();
 }
 
-void Steering::drawCircle(float raio)
+void Steering::drawSphere(float raio)
 {
-   float x, y;
-   float ang = 0;
-   glBegin(GL_LINE_STRIP);
-   for(int i=0; i<50; i++)
-   {
-       x = cos(ang)*raio;
-       y = sin(ang)*raio;
-       glVertex2f(x, y);
-       
-       ang += (2*3.14)/49;
-   }
-   glEnd();
+	glutWireSphere(raio, 10, 10);
+//   gluSphere(quadratic,raio,8,8);
 }
 
 //retorna valor entre [-1, 1]

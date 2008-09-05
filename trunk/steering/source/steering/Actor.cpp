@@ -4,7 +4,7 @@ Actor::Actor()
 {
    massa       = 0.4;
    timeElapsed = 0;
-   maxVel      = 15;
+   maxVel      = 20;
    maxForca    = 2;
    
    pos.set(0,0,0);
@@ -26,7 +26,7 @@ void Actor::update(double time_elapsed, Vec3 targetPos, int steeringType)
    vel += (acceleration * time_elapsed); 
 
    //make sure vehicle does not exceed maximum velocity
-   vel.truncateLength(maxVel);
+   vel=vel.truncateLength(maxVel);
 
    //update the position
    pos += vel * time_elapsed;
@@ -53,7 +53,7 @@ void Actor::render()
    steering->render(this);
 
    glPushMatrix();
-   glLoadIdentity();
+//   glLoadIdentity();
 
    //desenha o vetor direcao
    glColor3d(0, 1, 0);
@@ -71,12 +71,6 @@ void Actor::render()
    glEnd();     
 
    //calcula o angulo do personagem
-   //Vec3 vet(0,1,0);
-   //float ang = dir.angle(vet);
-   //ang *= (180/3.14);
-
-
-   //calcula o angulo do personagem
    Vec3 up;
    up.cross(dir, steeringForce);
    up=up.normalize();
@@ -85,16 +79,8 @@ void Actor::render()
    side=side.normalize();
 
    //desenha o actor
-   glColor3f(0.0f, 1.0f, 0.0f);
-   
-	//GLUquadric quad;
-	//gluSphere(&quad, 1.0f, 16, 16);
-//   glRotatef(-ang, 0, 0, 1);
-   glBegin(GL_TRIANGLES);
-      glVertex3d(-5, -5, 0);
-      glVertex3d(5, -5, 0);
-      glVertex3d(0, 15, 0);
-   glEnd();   
+   glColor3f(0.0f, 8.0f, 5.0f);
+   glutSolidSphere(4, 10, 10);
 
    glPopMatrix();
 }
