@@ -96,8 +96,8 @@ void normcrossprod(float v1[3], float v2[3], float out[3])
 
 void drawtriangle(float *v1, float *v2, float *v3)
 {
-		glBegin(GL_TRIANGLES);
-    //glBegin(GL_LINE_LOOP);
+	//glBegin(GL_TRIANGLES);
+    glBegin(GL_LINE_LOOP);
 	glNormal3fv(v1); glVertex3fv(v1);
 	glNormal3fv(v2); glVertex3fv(v2);
 	glNormal3fv(v3); glVertex3fv(v3);
@@ -197,6 +197,60 @@ void display(void)
 		glPopMatrix();
 	}
 
+
+	glPushMatrix();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (-200.0, 0.0, 0.0);
+	glColor3f (1.0, 0.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (200.0, 0.0, 0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, -200.0,0.0);
+	glColor3f (0.0, 1.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, 200.0,0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, -200.0);
+	glColor3f (0.0, 0.0, 1.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, 200.0);
+	glEnd ();
+	glPopMatrix();
+	glPushMatrix();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (-200.0, 0.0, 0.0);
+	glColor3f (1.0, 0.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (200.0, 0.0, 0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, -200.0,0.0);
+	glColor3f (0.0, 1.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, 200.0,0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, -200.0);
+	glColor3f (0.0, 0.0, 1.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, 200.0);
+	glEnd ();
+	glPopMatrix();
+
 	printf("                 \r", fps);
 	printf("FPS: %.0f\r", fps);
 	//static char text[50];
@@ -257,11 +311,11 @@ void reshape (int w, int h)
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
-	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0);
+	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 200.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//	gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	gluLookAt (0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	gluLookAt (10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 }
 

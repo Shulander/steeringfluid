@@ -17,30 +17,13 @@ double     fps = 100;
 clock_t t1, t2;  
 
 int posicaoluz = 0;
-#define X .525731112119133606
-#define Z .850650808352039932
-#define RESOLUCOES 7
-static GLfloat vdata[12][3] = {
-	{-X, 0.0, Z}, {X, 0.0, Z}, {-X, 0.0, -Z}, {X, 0.0, -Z},
-	{0.0, Z, X}, {0.0, Z, -X}, {0.0, -Z, X}, {0.0, -Z, -X},
-	{Z, X, 0.0}, {-Z, X, 0.0}, {Z, -X, 0.0}, {-Z, -X, 0.0}
-};
-static GLuint tindices[20][3] = {
-	{0,4,1}, {0,9,4}, {9,5,4}, {4,5,8}, {4,8,1},
-	{8,10,1}, {8,3,10}, {5,3,8}, {5,2,3}, {2,7,3},
-	{7,10,3}, {7,6,10}, {7,11,6}, {11,0,6}, {0,1,6},
-	{6,1,10}, {9,0,11}, {9,11,2}, {9,2,5}, {7,2,11}
-};
-
 int ligacor = 0;
 int resolucao = 0;
-GLuint dLEsfera[RESOLUCOES];
 
 Actor * ator;
 
 void init(void)
 {
-
 	/* Cria as matrizes responsáveis pelo
 	controle de luzes na cena */
 
@@ -88,7 +71,7 @@ void display(void)
 {
 	float frame_time;
 
-	glLoadIdentity();
+//	glLoadIdentity();
 	system("cls");
 
 	t2 = clock();
@@ -113,6 +96,35 @@ void display(void)
 	/* Armazena o estado anterior para
 	rotação da posição da luz */
 
+
+	// desenha linhas guias
+	glPushMatrix();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (-200.0, 0.0, 0.0);
+	glColor3f (1.0, 0.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (200.0, 0.0, 0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, -200.0,0.0);
+	glColor3f (0.0, 1.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, 200.0,0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, -200.0);
+	glColor3f (0.0, 0.0, 1.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, 200.0);
+	glEnd ();
+	glPopMatrix();
+
 	glPushMatrix () ;
 
 	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
@@ -133,13 +145,16 @@ void display(void)
 
 
 	//Sleep(50);
-	//ator->update(frame_time, Vec3(1,0,0), WANDER);
-	//ator->pos=ator->pos.sphericalWrapAround(Vec3(0,0,0), 5);
-	//ator->pos.print();
+	ator->update(frame_time, Vec3(1,0,0), WANDER);
+	ator->pos=ator->pos.sphericalWrapAround(Vec3(0,0,0), 50);
+	ator->pos.print();
 
-	//glPushMatrix();
-	//ator->render();
-	//glPopMatrix();
+	glPushMatrix();
+	// sphera de contençao dele
+	glColor3f (1.0, 1.0, 1.0);
+	glutWireSphere(50, 10, 10);
+	ator->render();
+	glPopMatrix();
 
 	// Executa os comandos
 	glutSwapBuffers();
@@ -164,11 +179,11 @@ void reshape (int w, int h)
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
-	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0);
+	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 500.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//	gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	gluLookAt( 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	gluLookAt (100.0, 100.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 }
 
@@ -229,8 +244,8 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize (500, 500);
-	glutInitWindowPosition (100, 100);
+	glutInitWindowSize (1024, 768);
+	glutInitWindowPosition (100, 0);
 	glutCreateWindow ("Teste Steering");
 	init ();
 	glutDisplayFunc(display);

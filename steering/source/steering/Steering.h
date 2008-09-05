@@ -30,6 +30,8 @@ private:
    
    int steeringType;
 
+//   GLUquadricObj *quadratic;
+
 public:
    Steering();
 
@@ -51,7 +53,7 @@ private:
    
    //********************************
    float randomClamped();
-   void drawCircle(float raio);
+   void drawSphere(float raio);
    void createFeelers(Actor *actor);
 };
 
