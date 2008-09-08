@@ -241,6 +241,12 @@ public:
 		printf("\n %f %f %f", x, y, z);
 	}
 
+	static Vec3 RandomUnitVector() {
+		Vec3 result((float)rand(), (float)rand(), (float)rand());
+		result = result.normalize();
+		return result;
+	}
+
     // names for frequently used vector constants
     static const Vec3 zero;
     static const Vec3 side;
@@ -264,7 +270,6 @@ inline Vec3 crossProduct(const Vec3& a, const Vec3& b)
 				(a.x * b.y) - (a.y * b.x));
 	return result;
 }
-
 
 // ----------------------------------------------------------------------------
 // default character stream output method
@@ -294,19 +299,6 @@ Vec3 RandomVectorInUnitRadiusSphere (void);
 
 
 Vec3 randomVectorOnUnitRadiusXZDisk (void);
-
-
-// ----------------------------------------------------------------------------
-// Returns a position randomly distributed on the surface of a sphere
-// of unit radius centered at the origin.  Orientation will be random
-// and length will be 1
-
-
-inline Vec3 RandomUnitVector (void)
-{
-    return RandomVectorInUnitRadiusSphere().normalize();
-}
-
 
 // ----------------------------------------------------------------------------
 // Returns a position randomly distributed on a circle of unit radius
@@ -378,7 +370,7 @@ inline float distanceFromLine (const Vec3& point,
 {
     const Vec3 offset = point - lineOrigin;
     const Vec3 perp = offset.perpendicularComponent (lineUnitTangent);
-    return perp.length();
+	return perp.length();
 }
 
 
