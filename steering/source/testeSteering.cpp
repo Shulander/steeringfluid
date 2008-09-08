@@ -20,7 +20,46 @@ int posicaoluz = 0;
 int ligacor = 0;
 int resolucao = 0;
 
-Actor * ator;
+GLuint linhasCartesianas;
+
+Actor * atorArrive;
+Actor * actorWander;
+Actor * actorFlee;
+Actor * actorSeek;
+
+void defineLinhasCartesianas(void) 
+{
+
+	linhasCartesianas = glGenLists(1);
+	glNewList(linhasCartesianas, GL_COMPILE);
+	//comandos de desenho do objeto
+	//vértices, transformações, etc.
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (-200.0, 0.0, 0.0);
+	glColor3f (1.0, 0.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f (200.0, 0.0, 0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, -200.0,0.0);
+	glColor3f (0.0, 1.0, 0.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0, 200.0,0.0);
+	glEnd ();
+	glBegin (GL_LINE_STRIP);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, -200.0);
+	glColor3f (0.0, 0.0, 1.0);
+	glVertex3f (0.0, 0.0, 0.0);
+	glColor3f (1.0, 1.0, 1.0);
+	glVertex3f ( 0.0,0.0, 200.0);
+	glEnd ();
+	glEndList();
+}
 
 void init(void)
 {
@@ -53,7 +92,19 @@ void init(void)
 	frames  = new Frames();
 	font    = new GLFont();
 	t1 = clock();
-	ator = new Actor();
+
+	atorArrive = new Actor();
+	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
+	atorArrive->massa = 5;
+
+	actorWander = new Actor();
+	actorWander->pos = Vec3::RandomUnitVector()*30.0;
+	actorFlee = new Actor();
+	actorFlee->pos = Vec3::RandomUnitVector()*30.0;
+	actorSeek = new Actor();
+	actorSeek->pos = Vec3::RandomUnitVector()*30.0;
+
+	defineLinhasCartesianas();
 }
 
 void error(char * str){
@@ -71,8 +122,12 @@ void display(void)
 {
 	float frame_time;
 
-//	glLoadIdentity();
+	glLoadIdentity();
 	system("cls");
+
+	gluLookAt(atorArrive->pos.x, atorArrive->pos.y, atorArrive->pos.z, atorArrive->pos.x+atorArrive->dir.x, atorArrive->pos.y+atorArrive->dir.y, atorArrive->pos.z+atorArrive->dir.z, 0.0, 1.0, 0.0);
+//	gluLookAt(actorSeek->pos.x, actorSeek->pos.y, actorSeek->pos.z, actorSeek->pos.x+actorSeek->dir.x, actorSeek->pos.y+actorSeek->dir.y, actorSeek->pos.z+actorSeek->dir.z, 0.0, 1.0, 0.0);
+	
 
 	t2 = clock();
 	frame_time  = (double)(t2 - t1) / CLOCKS_PER_SEC;
@@ -93,44 +148,20 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f (1.0, 1.0, 1.0);
 
+
+	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
+	glLightfv (GL_LIGHT0, GL_POSITION, posicao);
+
 	/* Armazena o estado anterior para
 	rotação da posição da luz */
 
 
 	// desenha linhas guias
 	glPushMatrix();
-	glBegin (GL_LINE_STRIP);
-	glColor3f (1.0, 1.0, 1.0);
-	glVertex3f (-200.0, 0.0, 0.0);
-	glColor3f (1.0, 0.0, 0.0);
-	glVertex3f (0.0, 0.0, 0.0);
-	glColor3f (1.0, 1.0, 1.0);
-	glVertex3f (200.0, 0.0, 0.0);
-	glEnd ();
-	glBegin (GL_LINE_STRIP);
-	glColor3f (1.0, 1.0, 1.0);
-	glVertex3f ( 0.0, -200.0,0.0);
-	glColor3f (0.0, 1.0, 0.0);
-	glVertex3f (0.0, 0.0, 0.0);
-	glColor3f (1.0, 1.0, 1.0);
-	glVertex3f ( 0.0, 200.0,0.0);
-	glEnd ();
-	glBegin (GL_LINE_STRIP);
-	glColor3f (1.0, 1.0, 1.0);
-	glVertex3f ( 0.0,0.0, -200.0);
-	glColor3f (0.0, 0.0, 1.0);
-	glVertex3f (0.0, 0.0, 0.0);
-	glColor3f (1.0, 1.0, 1.0);
-	glVertex3f ( 0.0,0.0, 200.0);
-	glEnd ();
+
+	glPushMatrix();
+	glCallList(linhasCartesianas);
 	glPopMatrix();
-
-	glPushMatrix () ;
-
-	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
-	glLightfv (GL_LIGHT0, GL_POSITION, posicao);
-
-	glPopMatrix(); // Posição da Luz
 
 	printf("                 \r", fps);
 	printf("FPS: %.0f\t frame_time: %.8f\r", fps, frame_time);
@@ -145,15 +176,33 @@ void display(void)
 
 
 	//Sleep(50);
-	ator->update(frame_time, Vec3(1,0,0), WANDER);
-	ator->pos=ator->pos.sphericalWrapAround(Vec3(0,0,0), 50);
-	ator->pos.print();
+	//ator->update(frame_time, Vec3(100,0,0), ARRIVE);
+	glPushMatrix();
+	// sphera de contençao dele
+	glTranslatef(30, 0, 0);
+	glColor3f (1.0, 0.0, 0.0);
+	glutSolidSphere(10, 10, 10);
+	glPopMatrix();
+
+	actorWander->update(frame_time, Vec3(0,0,0), WANDER);
+	atorArrive->update(frame_time, actorWander->pos, ARRIVE);
+	actorFlee->update(frame_time, actorWander->pos, FLEE);
+	actorSeek->update(frame_time, actorWander->pos, SEEK);
+
+	atorArrive->pos=atorArrive->pos.sphericalWrapAround(Vec3(0,0,0), 100);
+	actorFlee->pos=actorFlee->pos.sphericalWrapAround(Vec3(0,0,0), 100);
+	actorSeek->pos=actorSeek->pos.sphericalWrapAround(Vec3(0,0,0), 100);
+	actorWander->pos=actorWander->pos.sphericalWrapAround(Vec3(0,0,0), 100);
+//	ator->pos.print();
 
 	glPushMatrix();
 	// sphera de contençao dele
 	glColor3f (1.0, 1.0, 1.0);
-	glutWireSphere(50, 10, 10);
-	ator->render();
+	glutWireSphere(100, 10, 10);
+	atorArrive->render();
+	actorFlee->render();
+	actorSeek->render();
+	actorWander->render();
 	glPopMatrix();
 
 	// Executa os comandos
@@ -162,6 +211,7 @@ void display(void)
 	glutPostRedisplay();
 
 }
+
 
 /*
 Função responsável pelo desenho da tela
@@ -179,7 +229,7 @@ void reshape (int w, int h)
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
-	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 500.0);
+	gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 10.0, 500.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//	gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
