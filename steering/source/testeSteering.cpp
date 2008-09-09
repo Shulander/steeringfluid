@@ -94,8 +94,8 @@ void init(void)
 	t1 = clock();
 
 	atorArrive = new Actor();
-	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
-	atorArrive->massa = 5;
+//	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
+	atorArrive->massa = 3;
 
 	actorWander = new Actor();
 	actorWander->pos = Vec3::RandomUnitVector()*30.0;
@@ -123,11 +123,8 @@ void display(void)
 	float frame_time;
 
 	glLoadIdentity();
-	system("cls");
 
 	gluLookAt(atorArrive->pos.x, atorArrive->pos.y, atorArrive->pos.z, atorArrive->pos.x+atorArrive->dir.x, atorArrive->pos.y+atorArrive->dir.y, atorArrive->pos.z+atorArrive->dir.z, 0.0, 1.0, 0.0);
-//	gluLookAt(actorSeek->pos.x, actorSeek->pos.y, actorSeek->pos.z, actorSeek->pos.x+actorSeek->dir.x, actorSeek->pos.y+actorSeek->dir.y, actorSeek->pos.z+actorSeek->dir.z, 0.0, 1.0, 0.0);
-	
 
 	t2 = clock();
 	frame_time  = (double)(t2 - t1) / CLOCKS_PER_SEC;
@@ -149,8 +146,8 @@ void display(void)
 	glColor3f (1.0, 1.0, 1.0);
 
 
-	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
-	glLightfv (GL_LIGHT0, GL_POSITION, posicao);
+	//glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
+	//glLightfv (GL_LIGHT0, GL_POSITION, posicao);
 
 	/* Armazena o estado anterior para
 	rotação da posição da luz */
@@ -158,30 +155,7 @@ void display(void)
 
 	// desenha linhas guias
 	glPushMatrix();
-
-	glPushMatrix();
 	glCallList(linhasCartesianas);
-	glPopMatrix();
-
-	printf("                 \r", fps);
-	printf("FPS: %.0f\t frame_time: %.8f\r", fps, frame_time);
-
-	//static char text[50];
-	//font->startText();
-	//glColor3f(1,1,1);
-	//
-	//sprintf(text, "FPS:  %.0f", fps);
-	//font->print(20, 460, text);
-	//font->endText(); 
-
-
-	//Sleep(50);
-	//ator->update(frame_time, Vec3(100,0,0), ARRIVE);
-	glPushMatrix();
-	// sphera de contençao dele
-	glTranslatef(30, 0, 0);
-	glColor3f (1.0, 0.0, 0.0);
-	glutSolidSphere(10, 10, 10);
 	glPopMatrix();
 
 	actorWander->update(frame_time, Vec3(0,0,0), WANDER);
@@ -193,10 +167,9 @@ void display(void)
 	actorFlee->pos=actorFlee->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 	actorSeek->pos=actorSeek->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 	actorWander->pos=actorWander->pos.sphericalWrapAround(Vec3(0,0,0), 100);
-//	ator->pos.print();
 
 	glPushMatrix();
-	// sphera de contençao dele
+	// esfera de contençao dele
 	glColor3f (1.0, 1.0, 1.0);
 	glutWireSphere(100, 10, 10);
 	atorArrive->render();

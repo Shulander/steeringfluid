@@ -123,9 +123,9 @@ Vec3 Steering::wander(Actor *actor)
 	   randomClamped() * JitterThisTimeSlice,
 	   randomClamped() * JitterThisTimeSlice);
    
-   printf("\n\n J= %lf", JitterThisTimeSlice);
-   wanderTarget.print();
-   tmp.print();
+   //printf("\n\n J= %lf", JitterThisTimeSlice);
+   //wanderTarget.print();
+   //tmp.print();
    
    //first, add a small random vector to the target's position
    wanderTarget += tmp;
@@ -136,7 +136,7 @@ Vec3 Steering::wander(Actor *actor)
    //increase the length of the vector to the same as the radius
    //of the wander circle
    wanderTarget *= wanderRadius;
-   wanderTarget.print();
+//   wanderTarget.print();
 
    //Pozzer
    Vec3 target(actor->pos);
@@ -201,7 +201,7 @@ void Steering::render(Actor *actor)
    {
       //desenha o circulo na frente do actor
       glPushMatrix();
-      glColor3f(1,0,0);
+      glColor4f(1,0,0,0.5);
       glTranslated(target.x, target.y, target.z);
       drawSphere(wanderRadius);
       glPopMatrix();
@@ -209,8 +209,8 @@ void Steering::render(Actor *actor)
       //desenha o target
       glPushMatrix();
       glTranslated(wTarget.x, wTarget.y, wTarget.z);
-	  glColor3f(1,0.6,0);
-      drawSphere(4);
+	  glColor4f(1,0.6,0,0.5);
+      drawSphere(2);
       glPopMatrix();
    }
    
@@ -251,7 +251,6 @@ void Steering::drawSphere(float raio)
 float Steering::randomClamped()
 {
    float r = 1.0 - ((rand()%1000)/500.0);
-   printf("\nR= %.2f", r);
    return r;
 }
 

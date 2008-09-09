@@ -79,8 +79,8 @@ void Actor::render()
    side=side.normalize();
 
    //desenha o actor
-   glColor3f(0.0f, 8.0f, 5.0f);
-   glutSolidSphere(4, 10, 10);
+   glColor4f(0.0f, 8.0f, 5.0f, 0.5f);
+   glutSolidSphere(3, 10, 10);
 
    glPopMatrix();
 }
