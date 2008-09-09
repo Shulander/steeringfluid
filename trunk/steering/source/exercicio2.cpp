@@ -96,8 +96,8 @@ void normcrossprod(float v1[3], float v2[3], float out[3])
 
 void drawtriangle(float *v1, float *v2, float *v3)
 {
-	//glBegin(GL_TRIANGLES);
-    glBegin(GL_LINE_LOOP);
+	glBegin(GL_TRIANGLES);
+    //glBegin(GL_LINE_LOOP);
 	glNormal3fv(v1); glVertex3fv(v1);
 	glNormal3fv(v2); glVertex3fv(v2);
 	glNormal3fv(v3); glVertex3fv(v3);
