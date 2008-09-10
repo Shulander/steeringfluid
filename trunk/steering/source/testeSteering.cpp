@@ -9,6 +9,7 @@
 
 #include "base/Frames.h"
 #include "base/GLFont.h"
+#include "base/DisplayListElements.h"
 #include "steering/Actor.h"
 
 GLFont	* font;
@@ -18,7 +19,6 @@ clock_t t1, t2;
 
 int posicaoluz = 0;
 int ligacor = 0;
-int resolucao = 0;
 
 GLuint linhasCartesianas;
 
@@ -26,6 +26,10 @@ Actor * atorArrive;
 Actor * actorWander;
 Actor * actorFlee;
 Actor * actorSeek;
+
+int resolucao = 0;
+#define RESOLUCOES 7
+GLuint dLEsfera[RESOLUCOES];
 
 void defineLinhasCartesianas(void) 
 {
@@ -59,6 +63,8 @@ void defineLinhasCartesianas(void)
 	glVertex3f ( 0.0,0.0, 200.0);
 	glEnd ();
 	glEndList();
+
+	DisplayListElements::criaEsferasDisplayList(dLEsfera, RESOLUCOES);
 }
 
 void init(void)
@@ -168,15 +174,18 @@ void display(void)
 	actorSeek->pos=actorSeek->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 	actorWander->pos=actorWander->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 
+
 	glPushMatrix();
+	glColor3f (1.0, 1.0, 1.0);
+	glScalef(100, 100, 100);
+	glCallList(dLEsfera[resolucao]);
+	glPopMatrix();
 	// esfera de contençao dele
 	glColor3f (1.0, 1.0, 1.0);
-	glutWireSphere(100, 10, 10);
 	atorArrive->render();
 	actorFlee->render();
 	actorSeek->render();
 	actorWander->render();
-	glPopMatrix();
 
 	// Executa os comandos
 	glutSwapBuffers();
@@ -232,6 +241,7 @@ void keyboard (unsigned char key, int x, int y)
 		case '7':
 		case '8':
 		case '9':
+			resolucao = (key-'0'<RESOLUCOES?key-'0':RESOLUCOES-1);
 
 			glutPostRedisplay();
 			break;
