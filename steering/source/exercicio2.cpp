@@ -19,7 +19,7 @@ int posicaoluz = 0;
 void mudaModoDisplayList(void);
 #define X .525731112119133606
 #define Z .850650808352039932
-#define RESOLUCOES 7
+
 static GLfloat vdata[12][3] = {
 	{-X, 0.0, Z}, {X, 0.0, Z}, {-X, 0.0, -Z}, {X, 0.0, -Z},
 	{0.0, Z, X}, {0.0, Z, -X}, {0.0, -Z, X}, {0.0, -Z, -X},
@@ -34,6 +34,7 @@ static GLuint tindices[20][3] = {
 
 int ligacor = 0;
 int resolucao = 0;
+#define RESOLUCOES 7
 GLuint dLEsfera[RESOLUCOES];
 
 void init(void)
