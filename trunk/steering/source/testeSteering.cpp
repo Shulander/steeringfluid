@@ -27,13 +27,12 @@ Actor * actorWander;
 Actor * actorFlee;
 Actor * actorSeek;
 
-int resolucao = 0;
+int gResolucao = 0;
+DisplayListElements::DL_MODE gMode = DisplayListElements::WIRED;
 #define RESOLUCOES 7
-GLuint dLEsfera[RESOLUCOES];
 
 void defineLinhasCartesianas(void) 
 {
-
 	linhasCartesianas = glGenLists(1);
 	glNewList(linhasCartesianas, GL_COMPILE);
 	//comandos de desenho do objeto
@@ -63,8 +62,6 @@ void defineLinhasCartesianas(void)
 	glVertex3f ( 0.0,0.0, 200.0);
 	glEnd ();
 	glEndList();
-
-	DisplayListElements::criaEsferasDisplayList(dLEsfera, RESOLUCOES);
 }
 
 void init(void)
@@ -151,9 +148,8 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f (1.0, 1.0, 1.0);
 
-
-	//glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
-	//glLightfv (GL_LIGHT0, GL_POSITION, posicao);
+	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
+	glLightfv (GL_LIGHT0, GL_POSITION, posicao);
 
 	/* Armazena o estado anterior para
 	rotação da posição da luz */
@@ -178,14 +174,14 @@ void display(void)
 	glPushMatrix();
 	glColor3f (1.0, 1.0, 1.0);
 	glScalef(100, 100, 100);
-	glCallList(dLEsfera[resolucao]);
+	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::WIRED, gResolucao);
 	glPopMatrix();
 	// esfera de contençao dele
 	glColor3f (1.0, 1.0, 1.0);
-	atorArrive->render();
-	actorFlee->render();
-	actorSeek->render();
-	actorWander->render();
+	atorArrive->render(gMode, gResolucao);
+	actorFlee->render(gMode, gResolucao);
+	actorSeek->render(gMode, gResolucao);
+	actorWander->render(gMode, gResolucao);
 
 	// Executa os comandos
 	glutSwapBuffers();
@@ -231,6 +227,14 @@ ou aramadas (wire)
 void keyboard (unsigned char key, int x, int y)
 {
 	switch (key) {
+		case 'w':
+		case 'W':
+			if(gMode == DisplayListElements::WIRED) {
+				gMode = DisplayListElements::SOLID;
+			} else {
+				gMode = DisplayListElements::WIRED;
+			}
+			break;
 		case '0':
 		case '1':
 		case '2':
@@ -241,7 +245,7 @@ void keyboard (unsigned char key, int x, int y)
 		case '7':
 		case '8':
 		case '9':
-			resolucao = (key-'0'<RESOLUCOES?key-'0':RESOLUCOES-1);
+			gResolucao = (key-'0'<RESOLUCOES?key-'0':RESOLUCOES-1);
 
 			glutPostRedisplay();
 			break;

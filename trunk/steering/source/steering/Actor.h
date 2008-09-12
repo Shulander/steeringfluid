@@ -7,6 +7,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "Steering.h"
+#include "../base/DisplayListElements.h"
 #include <GL/glut.h>
 
 
@@ -15,27 +16,28 @@ class Actor
 {
 
 public:
-   Vec3 pos,  //posicao
-       dir,  //direcao
-//       lado, //vetor perperndicular a direcao
-       vel;  //velocidade
+	Vec3 pos,  //posicao
+	   dir,  //direcao
+	//   lado, //vetor perperndicular a direcao
+	   vel;  //velocidade
 
-   Vec3 steeringForce;
+	Vec3 steeringForce;
 
-  
-   float   raio;
-   double  massa;        //massa do actor
-   float   timeElapsed;
-   double  maxVel;       //velocidade maxima
-   double  maxForca;     //forca maxima que o actor pode produzir
-   
-   Steering *steering;
-   
-   Actor();
-   
-   void update(double time_elapsed, Vec3 targetPos, int steeringType);
 
-   void render();
+	float   raio;
+	double  massa;        //massa do actor
+	float   timeElapsed;
+	double  maxVel;       //velocidade maxima
+	double  maxForca;     //forca maxima que o actor pode produzir
+
+	Steering *steering;
+
+	Actor();
+
+	void update(double time_elapsed, Vec3 targetPos, int steeringType);
+
+	void render(DisplayListElements::DL_MODE theMode, int theResolucao);
+	void render();
 };
 
 #endif

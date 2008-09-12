@@ -5,6 +5,24 @@ DisplayListElements::DisplayListElements(void) {
 }
 
 /************************************************************************/
+/* Método responsável por desenhar as esferas utilizando display list   */
+/* Caso não esteja definida a mesma é definida e em seguida desenhada   */
+/************************************************************************/
+void DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::DL_MODE theMode, int theResolucao) 
+{
+	// mantem as resolucoes a um nível aceitável dentro dos padroes maximos e mínimos
+	theResolucao = (theResolucao>=DL_RESOLUCOES?DL_RESOLUCOES-1: theResolucao);
+	theResolucao = (theResolucao<0?0:theResolucao);
+
+	if(dLEsfera[theMode][theResolucao]==-1) {
+		mMode = theMode;
+		criaEsferasDisplayList(dLEsfera[theMode], DL_RESOLUCOES);
+	}
+
+	glCallList(dLEsfera[theMode][theResolucao]);
+}
+
+/************************************************************************/
 // Função responsável pelo desenho das esferas.
 // Nesta função também serão aplicadas as tranformações
 // necessárias para o efeito desejado.                                                                    */
@@ -58,8 +76,8 @@ void DisplayListElements::normcrossprod(float v1[3], float v2[3], float out[3])
 
 void DisplayListElements::drawtriangle(float *v1, float *v2, float *v3)
 {
-	//glBegin(GL_TRIANGLES);
-	glBegin(GL_LINE_LOOP);
+	if(mMode==DisplayListElements::SOLID){ glBegin(GL_TRIANGLES); } 
+	else {	glBegin(GL_LINE_LOOP); }
 	glNormal3fv(v1); glVertex3fv(v1);
 	glNormal3fv(v2); glVertex3fv(v2);
 	glNormal3fv(v3); glVertex3fv(v3);
@@ -118,3 +136,5 @@ GLuint DisplayListElements::tindices[20][3] = {
 };
 double DisplayListElements::X = .525731112119133606;
 double DisplayListElements::Z = .850650808352039932;
+GLuint DisplayListElements::dLEsfera[2][DL_RESOLUCOES] = {{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1}};
+DisplayListElements::DL_MODE DisplayListElements::mMode = DisplayListElements::WIRED;
