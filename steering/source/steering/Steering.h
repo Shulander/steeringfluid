@@ -8,6 +8,7 @@
 #define PURSUIT 4
 
 #include "../base/Vec3.hpp"
+#include "../base/DisplayListElements.h"
 
 class Actor;
 
@@ -36,6 +37,7 @@ public:
 
    Vec3 calculateSteering(Actor *actor, Vec3 targetPos, int steeringType);
    
+   void render(Actor *actor, DisplayListElements::DL_MODE theMode, int theResolucao);
    void render(Actor *actor); 
 
 private:

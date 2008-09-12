@@ -5,25 +5,28 @@
 #include <math.h>
 #include <GL/glut.h>
 
+#define DL_RESOLUCOES 5
 
 class DisplayListElements {
 
 public:
+
+	static enum DL_MODE{
+		SOLID=0,
+		WIRED=1
+	};
+
 	DisplayListElements (void);
 
-	/************************************************************************/
-	//  Função responsável pelo desenho das esferas.
-	// Nesta função também serão aplicadas as tranformações
-	// necessárias para o efeito desejado. 
-	/************************************************************************/
-
-	static void criaEsferasDisplayList(GLuint *theDLEsfera, int theResolucoes);
+	static void desenhaEsferasDisplayList(DL_MODE theMode, int theResolucao);
 
 private:
 	static GLfloat vdata[12][3];
 	static GLuint tindices[20][3];
 	static double X;
 	static double Z;
+	static DL_MODE mMode;
+	static GLuint dLEsfera[2][DL_RESOLUCOES];
 
 	static void error(char * str);
 	static void normalize(float v[3]);
@@ -31,6 +34,14 @@ private:
 	static void drawtriangle(float *v1, float *v2, float *v3);
 	static void subdivide(float *v1, float *v2, float *v3);
 	static void subdivide2(float *v1, float *v2, float *v3, long depth);
+
+
+	/************************************************************************/
+	//  Função responsável pelo desenho das esferas.
+	// Nesta função também serão aplicadas as tranformações
+	// necessárias para o efeito desejado. 
+	/************************************************************************/
+	static void criaEsferasDisplayList(GLuint *theDLEsfera, int theResolucoes);
 
 };
 #endif

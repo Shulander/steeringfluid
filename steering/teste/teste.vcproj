@@ -161,6 +161,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\base\DisplayListElements.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\base\Frames.h"
 				>
 			</File>
@@ -188,6 +192,10 @@
 			</File>
 			<File
 				RelativePath="..\source\base\camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\base\DisplayListElements.h"
 				>
 			</File>
 			<File

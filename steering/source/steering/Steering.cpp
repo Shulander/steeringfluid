@@ -188,57 +188,64 @@ Vec3 Steering::wallAvoidance(Actor *actor)
 }
 
 
+void Steering::render(Actor *actor, DisplayListElements::DL_MODE theMode, int theResolucao)
+{
+	Vec3 target(actor->pos);
+	target += (actor->dir*wanderDistance);
+
+	Vec3 wTarget(target);
+	wTarget+=wanderTarget;
+
+	if( steeringType == WANDER )
+	{
+		//desenha o circulo na frente do actor
+		glPushMatrix();
+		glColor4f(1,0,0,0.5);
+		glTranslated(target.x, target.y, target.z);
+		glScalef(wanderRadius, wanderRadius, wanderRadius);
+		DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
+		glPopMatrix();
+
+		//desenha o target
+		glPushMatrix();
+		glTranslated(wTarget.x, wTarget.y, wTarget.z);
+		glColor4f(1,0.6,0,0.5);
+		glScalef(2, 2, 2);
+		DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
+		glPopMatrix();
+	}
+
+	//desenha o muro
+	//glColor3f(0,1,0);
+	//glPushMatrix();
+	//glLoadIdentity();
+	//glBegin(GL_LINES);
+	//   glVertex3d(wall[0].x, wall[0].y, wall[0].z);
+	//   glVertex3d(wall[1].x, wall[1].y, wall[1].z);
+	//glEnd();     
+
+	//desenha as antenas
+	//glColor3f(1,0,0);
+	//glPushMatrix();
+	//glLoadIdentity();
+	//glTranslatef(actor->pos.x, actor->pos.y, actor->pos.z);
+	//glBegin(GL_LINES);
+	//   for(int i=0; i<3; i++)
+	//   {
+	//      Vec3 tmp(antenas[i]);
+	//      tmp -= actor->pos;
+	//      glVertex3d(0, 0, 0);
+	//      glVertex3d(tmp.x, tmp.y, tmp.z);
+	//   }
+	//glEnd();  
+	//glPopMatrix();
+	glPopMatrix();
+
+}
 //*************************************************************
 void Steering::render(Actor *actor)
 {
-   Vec3 target(actor->pos);
-   target += (actor->dir*wanderDistance);
-   
-   Vec3 wTarget(target);
-   wTarget+=wanderTarget;
-   
-   if( steeringType == WANDER )
-   {
-      //desenha o circulo na frente do actor
-      glPushMatrix();
-      glColor4f(1,0,0,0.5);
-      glTranslated(target.x, target.y, target.z);
-      drawSphere(wanderRadius);
-      glPopMatrix();
-      
-      //desenha o target
-      glPushMatrix();
-      glTranslated(wTarget.x, wTarget.y, wTarget.z);
-	  glColor4f(1,0.6,0,0.5);
-      drawSphere(2);
-      glPopMatrix();
-   }
-   
-   //desenha o muro
-   glColor3f(0,1,0);
-   glPushMatrix();
-   glLoadIdentity();
-   glBegin(GL_LINES);
-      glVertex3d(wall[0].x, wall[0].y, wall[0].z);
-      glVertex3d(wall[1].x, wall[1].y, wall[1].z);
-   glEnd();     
-  
-   //desenha as antenas
-   //glColor3f(1,0,0);
-   //glPushMatrix();
-   //glLoadIdentity();
-   //glTranslatef(actor->pos.x, actor->pos.y, actor->pos.z);
-   //glBegin(GL_LINES);
-   //   for(int i=0; i<3; i++)
-   //   {
-   //      Vec3 tmp(antenas[i]);
-   //      tmp -= actor->pos;
-   //      glVertex3d(0, 0, 0);
-   //      glVertex3d(tmp.x, tmp.y, tmp.z);
-   //   }
-   //glEnd();  
-   //glPopMatrix();
-   glPopMatrix();
+	render(actor, DisplayListElements::WIRED, 1);
 }
 
 void Steering::drawSphere(float raio)
