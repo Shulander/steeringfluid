@@ -51,6 +51,15 @@ void Actor::render(DisplayListElements::DL_MODE theMode, int theResolucao) {
 	//renderiza o steering behavior
 	steering->render(this, theMode, theResolucao);
 
+
+	//desenha o actor
+	glPushMatrix();
+	glTranslatef(pos.x, pos.y, pos.z);
+	glColor3f(0.5f, 0.7f, 1.0f);
+	glScalef(3, 3, 3);
+	DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
+	glPopMatrix();
+
 	glPushMatrix();
 	//   glLoadIdentity();
 
@@ -76,13 +85,6 @@ void Actor::render(DisplayListElements::DL_MODE theMode, int theResolucao) {
 	Vec3 side;
 	side.cross(dir, up);
 	side=side.normalize();
-
-	//desenha o actor
-	glPushMatrix();
-	glColor4f(0.0f, 8.0f, 5.0f, 0.5f);
-	glScalef(3, 3, 3);
-	DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
-	glPopMatrix();
 
 	glPopMatrix();
 }

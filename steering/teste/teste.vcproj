@@ -161,7 +161,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\base\DisplayListElements.cpp"
+				RelativePath="..\source\base\DisplayListElements.h"
 				>
 			</File>
 			<File
@@ -195,7 +195,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\base\DisplayListElements.h"
+				RelativePath="..\source\base\DisplayListElements.cpp"
 				>
 			</File>
 			<File

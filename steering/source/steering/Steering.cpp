@@ -200,7 +200,7 @@ void Steering::render(Actor *actor, DisplayListElements::DL_MODE theMode, int th
 	{
 		//desenha o circulo na frente do actor
 		glPushMatrix();
-		glColor4f(1,0,0,0.5);
+		glColor3f(1,0,0);
 		glTranslated(target.x, target.y, target.z);
 		glScalef(wanderRadius, wanderRadius, wanderRadius);
 		DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
@@ -209,7 +209,7 @@ void Steering::render(Actor *actor, DisplayListElements::DL_MODE theMode, int th
 		//desenha o target
 		glPushMatrix();
 		glTranslated(wTarget.x, wTarget.y, wTarget.z);
-		glColor4f(1,0.6,0,0.5);
+		glColor3f(1,0.6,0);
 		glScalef(2, 2, 2);
 		DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
 		glPopMatrix();
@@ -239,7 +239,7 @@ void Steering::render(Actor *actor, DisplayListElements::DL_MODE theMode, int th
 	//   }
 	//glEnd();  
 	//glPopMatrix();
-	glPopMatrix();
+	//glPopMatrix();
 
 }
 //*************************************************************
