@@ -23,6 +23,47 @@ void DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::DL_MODE
 }
 
 /************************************************************************/
+/* Método responsável por desenhar as esferas utilizando display list   */
+/* Caso não esteja definida a mesma é definida e em seguida desenhada   */
+/************************************************************************/
+void DisplayListElements::desenhaTeaPot(DisplayListElements::DL_MODE theMode) 
+{
+	if(dLTeaPot[theMode]==-1) {
+		mMode = theMode;
+		criaTeaPotDisplayList(&dLTeaPot[theMode]);
+	}
+
+	glCallList(dLTeaPot[theMode]);
+}
+
+/************************************************************************/
+// Função responsável pelo desenho dos teapot.
+// Nesta função também serão aplicadas as tranformações
+// necessárias para o efeito desejado.
+/************************************************************************/
+
+void DisplayListElements::criaTeaPotDisplayList(GLuint *theDLTeaPot) 
+{
+	GLuint tempIndice = glGenLists(1);
+
+	GLfloat semespecular[4]={0.0,0.0,0.0,1.0};
+	theDLTeaPot[0] = tempIndice;
+	glNewList(tempIndice, GL_COMPILE);
+	//comandos de desenho do objeto
+	//vértices, transformações, etc.
+	// Define a propriedade do material
+	//refletância do material
+	glMaterialfv(GL_FRONT,GL_SPECULAR, semespecular);
+	// Define a concentração do brilho
+	glMateriali(GL_FRONT,GL_SHININESS,100);
+
+	if(mMode==DisplayListElements::SOLID){ glutSolidTeapot(1.0); } 
+	else {	glutWireTeapot(1.0); }
+
+	glEndList();
+}
+
+/************************************************************************/
 // Função responsável pelo desenho das esferas.
 // Nesta função também serão aplicadas as tranformações
 // necessárias para o efeito desejado.                                                                    */
@@ -36,7 +77,6 @@ void DisplayListElements::criaEsferasDisplayList(GLuint *theDLEsfera, int theRes
 
 
 	for(int j=0; j<theResolucoes; j++) {
-
 		theDLEsfera[j] = tempIndice+j;
 		glNewList(tempIndice+j, GL_COMPILE);
 		//comandos de desenho do objeto
@@ -45,7 +85,7 @@ void DisplayListElements::criaEsferasDisplayList(GLuint *theDLEsfera, int theRes
 		//refletância do material
 		glMaterialfv(GL_FRONT,GL_SPECULAR, semespecular);
 		// Define a concentração do brilho
-		glMateriali(GL_FRONT,GL_SHININESS,100);
+		glMateriali(GL_FRONT_AND_BACK,GL_SHININESS,100);		
 
 		for (int i = 0; i < 20; i++) {
 			subdivide2(&vdata[tindices[i][0]][0], &vdata[tindices[i][1]][0], &vdata[tindices[i][2]][0], j);
@@ -137,4 +177,5 @@ GLuint DisplayListElements::tindices[20][3] = {
 double DisplayListElements::X = .525731112119133606;
 double DisplayListElements::Z = .850650808352039932;
 GLuint DisplayListElements::dLEsfera[2][DL_RESOLUCOES] = {{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1}};
+GLuint DisplayListElements::dLTeaPot[2] = {-1,-1};
 DisplayListElements::DL_MODE DisplayListElements::mMode = DisplayListElements::WIRED;

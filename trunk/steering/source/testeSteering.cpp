@@ -78,7 +78,8 @@ void init(void)
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
-	glShadeModel(GL_SMOOTH);
+//	glShadeModel(GL_SMOOTH);
+	glShadeModel(GL_FLAT);
 
 	/* Cria e configura a Luz para a cena */
 
@@ -92,12 +93,26 @@ void init(void)
 	glEnable(GL_LIGHT0);
 	glEnable(GL_COLOR_MATERIAL);
 
+
+	//Armazena o estado anterior para
+	//rotação da posição da luz 
+
+	glPushMatrix () ;
+
+	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
+	glLightfv (GL_LIGHT0, GL_POSITION, posicao);
+
+	glPopMatrix(); // Posição da Luz
+
+	/* Armazena o estado anterior para
+	rotação da posição da luz */
+
 	frames  = new Frames();
 	font    = new GLFont();
 	t1 = clock();
 
 	atorArrive = new Actor();
-//	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
+	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
 	atorArrive->massa = 3;
 
 	actorWander = new Actor();
@@ -123,36 +138,24 @@ necessárias para o efeito desejado.
 long rotaciona=0l;
 void display(void)
 {
-	float frame_time;
 
 	glLoadIdentity();
-
 	gluLookAt(atorArrive->pos.x, atorArrive->pos.y, atorArrive->pos.z, atorArrive->pos.x+atorArrive->dir.x, atorArrive->pos.y+atorArrive->dir.y, atorArrive->pos.z+atorArrive->dir.z, 0.0, 1.0, 0.0);
+	//	gluLookAt (100.0, 100.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+	//Limpa o buffer de pixels e
+	//determina a cor padrão dos objetos.
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor3f (1.0, 1.0, 1.0);
+
+	float frame_time;
 
 	t2 = clock();
 	frame_time  = (double)(t2 - t1) / CLOCKS_PER_SEC;
 	t1 = t2;
 
 	fps = frames->getFrames();
-
-	/* Variáveis para definição da capacidade de brilho do material */
-	GLfloat especular[] = { 1.0, 1.0, 1.0, 1.0 };
-
-	/* Posição da luz */
-	GLfloat posicao[] = { 0.0, 3.0, 2.0, 0.0 };
-
-	/*
-	Limpa o buffer de pixels e
-	determina a cor padrão dos objetos.
-	*/
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3f (1.0, 1.0, 1.0);
-
-	glRotated ((GLdouble) posicaoluz, 1.0, 0.0, 0.0);
-	glLightfv (GL_LIGHT0, GL_POSITION, posicao);
-
-	/* Armazena o estado anterior para
-	rotação da posição da luz */
 
 
 	// desenha linhas guias
@@ -171,12 +174,20 @@ void display(void)
 	actorWander->pos=actorWander->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 
 
+	// esfera de contençao dele
 	glPushMatrix();
 	glColor3f (1.0, 1.0, 1.0);
 	glScalef(100, 100, 100);
 	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::WIRED, gResolucao);
 	glPopMatrix();
-	// esfera de contençao dele
+
+	glPushMatrix();
+	glColor3f (0.0, 1.0, 1.0);
+	glScalef(5, 5, 5);
+	DisplayListElements::desenhaTeaPot(gMode);
+	glPopMatrix();
+
+
 	glColor3f (1.0, 1.0, 1.0);
 	atorArrive->render(gMode, gResolucao);
 	actorFlee->render(gMode, gResolucao);

@@ -19,6 +19,7 @@ public:
 	DisplayListElements (void);
 
 	static void desenhaEsferasDisplayList(DL_MODE theMode, int theResolucao);
+	static void desenhaTeaPot(DL_MODE theMode);
 
 private:
 	static GLfloat vdata[12][3];
@@ -27,6 +28,7 @@ private:
 	static double Z;
 	static DL_MODE mMode;
 	static GLuint dLEsfera[2][DL_RESOLUCOES];
+	static GLuint dLTeaPot[2];
 
 	static void error(char * str);
 	static void normalize(float v[3]);
@@ -42,6 +44,14 @@ private:
 	// necessárias para o efeito desejado. 
 	/************************************************************************/
 	static void criaEsferasDisplayList(GLuint *theDLEsfera, int theResolucoes);
+
+	/************************************************************************/
+	// Função responsável pelo desenho dos teapot.
+	// Nesta função também serão aplicadas as tranformações
+	// necessárias para o efeito desejado.                                  
+	/************************************************************************/
+
+	static void DisplayListElements::criaTeaPotDisplayList(GLuint *theDLTeaPot);
 
 };
 #endif
