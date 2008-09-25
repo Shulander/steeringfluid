@@ -1,4 +1,4 @@
-#include "Actor.h"
+#include "Boid.h"
 #include "Steering.h"
 #include <math.h>
 
@@ -26,7 +26,7 @@ Steering::Steering()
 //   quadratic=gluNewQuadric();
 }
    
-Vec3 Steering::calculateSteering(Actor *actor, Vec3 targetPos, int type)
+Vec3 Steering::calculateSteering(Boid *actor, Vec3 targetPos, int type)
 {
    Vec3 wallForce = wallAvoidance(actor);
    if( wallForce.lengthSquared() > 1 )
@@ -52,10 +52,14 @@ Vec3 Steering::calculateSteering(Actor *actor, Vec3 targetPos, int type)
        case WANDER: 
            return wander(actor);
            break;
+
+	   default:
+		   return Vec3::RandomUnitVector();
+		   break;
    }
 }
 
-Vec3 Steering::seek(Actor *actor, Vec3 targetPos)
+Vec3 Steering::seek(Boid *actor, Vec3 targetPos)
 {
    Vec3 desiredVelocity;
    desiredVelocity = targetPos - actor->pos;
@@ -66,7 +70,7 @@ Vec3 Steering::seek(Actor *actor, Vec3 targetPos)
 }
    
 
-Vec3 Steering::flee(Actor *actor, Vec3 targetPos)
+Vec3 Steering::flee(Boid *actor, Vec3 targetPos)
 {
    double panicDistance = 100;
 
@@ -82,7 +86,7 @@ Vec3 Steering::flee(Actor *actor, Vec3 targetPos)
    return (desiredVelocity - actor->vel);
 }
 
-Vec3 Steering::arrive(Actor *actor, Vec3 targetPos)
+Vec3 Steering::arrive(Boid *actor, Vec3 targetPos)
 {
    Vec3 toTarget = targetPos - actor->pos;
     
@@ -113,7 +117,7 @@ Vec3 Steering::arrive(Actor *actor, Vec3 targetPos)
 //--------------------------- Wander -------------------------------------
 //  This behavior makes the agent wander about randomly
 //------------------------------------------------------------------------
-Vec3 Steering::wander(Actor *actor)
+Vec3 Steering::wander(Boid *actor)
 { 
    //this behavior is dependent on the update rate, so this line must
    //be included when using time independent framerate.
@@ -147,9 +151,9 @@ Vec3 Steering::wander(Actor *actor)
 } 
 
 
-Vec3 Steering::wallAvoidance(Actor *actor)
+Vec3 Steering::wallAvoidance(Boid *actor)
 {
-   createFeelers(actor);
+//   createFeelers(actor);
 
    double distance = 0.0;
 
@@ -188,7 +192,7 @@ Vec3 Steering::wallAvoidance(Actor *actor)
 }
 
 
-void Steering::render(Actor *actor, DisplayListElements::DL_MODE theMode, int theResolucao)
+void Steering::render(Boid *actor, DisplayListElements::DL_MODE theMode, int theResolucao)
 {
 	Vec3 target(actor->pos);
 	target += (actor->dir*wanderDistance);
@@ -243,7 +247,7 @@ void Steering::render(Actor *actor, DisplayListElements::DL_MODE theMode, int th
 
 }
 //*************************************************************
-void Steering::render(Actor *actor)
+void Steering::render(Boid *actor)
 {
 	render(actor, DisplayListElements::WIRED, 1);
 }
@@ -259,26 +263,4 @@ float Steering::randomClamped()
 {
    float r = 1.0 - ((rand()%1000)/500.0);
    return r;
-}
-
-//------------------------------- CreateFeelers --------------------------
-//
-//  Creates the antenna utilized by WallAvoidance
-//------------------------------------------------------------------------
-void Steering::createFeelers(Actor *actor)
-{
-  //feeler pointing straight in front
-  antenas[0] = actor->pos + (actor->dir * wallDetectionFeelerLength);
-
-  //feeler to left
-  Vec3 temp = actor->dir;
-  temp.rotateAboutGlobalY(3.14/4.0);
-//  temp.rotate(3.14/4.0); //45 graus
-  antenas[1] = actor->pos + (temp*wallDetectionFeelerLength/2.0f);
-
-  //feeler to right
-  temp = actor->dir;
-  temp.rotateAboutGlobalY(-3.14/4.0);
-//  temp.rotate(-3.14/4.0); //45 graus
-  antenas[2] = actor->pos + (temp*wallDetectionFeelerLength/2.0f);
 }

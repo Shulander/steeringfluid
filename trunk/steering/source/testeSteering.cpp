@@ -10,7 +10,7 @@
 #include "base/Frames.h"
 #include "base/GLFont.h"
 #include "base/DisplayListElements.h"
-#include "steering/Actor.h"
+#include "steering/Boid.h"
 
 GLFont	* font;
 Frames  * frames;
@@ -22,10 +22,10 @@ int ligacor = 0;
 
 GLuint linhasCartesianas;
 
-Actor * atorArrive;
-Actor * actorWander;
-Actor * actorFlee;
-Actor * actorSeek;
+Boid * atorArrive;
+Boid * actorWander;
+Boid * actorFlee;
+Boid * actorSeek;
 
 int gResolucao = 0;
 DisplayListElements::DL_MODE gMode = DisplayListElements::WIRED;
@@ -111,15 +111,17 @@ void init(void)
 	font    = new GLFont();
 	t1 = clock();
 
-	atorArrive = new Actor();
+	atorArrive = new Boid();
 	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
-	atorArrive->massa = 3;
+	atorArrive->vel.set(-10,-10,-10);
+	atorArrive->maxVel = 200;
+//	atorArrive->massa = 3;
 
-	actorWander = new Actor();
+	actorWander = new Boid();
 	actorWander->pos = Vec3::RandomUnitVector()*30.0;
-	actorFlee = new Actor();
+	actorFlee = new Boid();
 	actorFlee->pos = Vec3::RandomUnitVector()*30.0;
-	actorSeek = new Actor();
+	actorSeek = new Boid();
 	actorSeek->pos = Vec3::RandomUnitVector()*30.0;
 
 	defineLinhasCartesianas();
@@ -140,8 +142,8 @@ void display(void)
 {
 
 	glLoadIdentity();
-	gluLookAt(atorArrive->pos.x, atorArrive->pos.y, atorArrive->pos.z, atorArrive->pos.x+atorArrive->dir.x, atorArrive->pos.y+atorArrive->dir.y, atorArrive->pos.z+atorArrive->dir.z, 0.0, 1.0, 0.0);
-	//	gluLookAt (100.0, 100.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	//gluLookAt(atorArrive->pos.x, atorArrive->pos.y, atorArrive->pos.z, atorArrive->pos.x+atorArrive->dir.x, atorArrive->pos.y+atorArrive->dir.y, atorArrive->pos.z+atorArrive->dir.z, 0.0, 1.0, 0.0);
+	gluLookAt (100.0, 80.0, 90.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	//Limpa o buffer de pixels e
 	//determina a cor padrão dos objetos.
@@ -164,7 +166,7 @@ void display(void)
 	glPopMatrix();
 
 	actorWander->update(frame_time, Vec3(0,0,0), WANDER);
-	atorArrive->update(frame_time, actorWander->pos, ARRIVE);
+	atorArrive->update(frame_time, Vec3(50,0,0), ARRIVE);
 	actorFlee->update(frame_time, actorWander->pos, FLEE);
 	actorSeek->update(frame_time, actorWander->pos, SEEK);
 
@@ -176,14 +178,15 @@ void display(void)
 
 	// esfera de contençao dele
 	glPushMatrix();
-	glColor3f (1.0, 1.0, 1.0);
+	glColor3f (0.5, 0.5, 0.5);
 	glScalef(100, 100, 100);
 	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::WIRED, gResolucao);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f (0.0, 1.0, 1.0);
-	glScalef(5, 5, 5);
+	glTranslatef(50,0,0);
+	glScalef(1, 1, 1);
 	DisplayListElements::desenhaTeaPot(gMode);
 	glPopMatrix();
 

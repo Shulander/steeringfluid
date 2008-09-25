@@ -52,6 +52,7 @@
 
 #include <vector>    // for std::vector
 #include <ostream>
+#include <math.h>
 
 //#include "OpenSteer/Utilities.h"  // for interpolate, etc.
 
