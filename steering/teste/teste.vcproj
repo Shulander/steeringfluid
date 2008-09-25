@@ -153,7 +153,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\source\steering\Actor.h"
+				RelativePath="..\source\steering\Boid.h"
 				>
 			</File>
 			<File
@@ -173,6 +173,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\steering\Proximity.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\steering\Steering.h"
 				>
 			</File>
@@ -187,7 +191,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\source\steering\Actor.cpp"
+				RelativePath="..\source\steering\Boid.cpp"
 				>
 			</File>
 			<File
@@ -200,6 +204,10 @@
 			</File>
 			<File
 				RelativePath="..\source\base\GLFont.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\steering\Proximity.cpp"
 				>
 			</File>
 			<File

@@ -10,7 +10,7 @@
 #include "../base/Vec3.hpp"
 #include "../base/DisplayListElements.h"
 
-class Actor;
+class Boid;
 
 class Steering
 {
@@ -35,27 +35,27 @@ private:
 public:
    Steering();
 
-   Vec3 calculateSteering(Actor *actor, Vec3 targetPos, int steeringType);
+   Vec3 calculateSteering(Boid *actor, Vec3 targetPos, int steeringType);
    
-   void render(Actor *actor, DisplayListElements::DL_MODE theMode, int theResolucao);
-   void render(Actor *actor); 
+   void render(Boid *actor, DisplayListElements::DL_MODE theMode, int theResolucao);
+   void render(Boid *actor); 
 
 private:
-   Vec3 seek(Actor *actor, Vec3 targetPos);
+   Vec3 seek(Boid *actor, Vec3 targetPos);
    
-   Vec3 flee(Actor *actor, Vec3 targetPos);
+   Vec3 flee(Boid *actor, Vec3 targetPos);
    
-   Vec3 arrive(Actor *actor, Vec3 targetPos);
+   Vec3 arrive(Boid *actor, Vec3 targetPos);
 
-   Vec3 wander(Actor *actor);
+   Vec3 wander(Boid *actor);
 
-   Vec3 wallAvoidance(Actor *actor);
+   Vec3 wallAvoidance(Boid *actor);
    
    
    //********************************
    float randomClamped();
    void drawSphere(float raio);
-   void createFeelers(Actor *actor);
+   void createFeelers(Boid *actor);
 };
 
 
