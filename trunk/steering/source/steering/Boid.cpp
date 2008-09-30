@@ -6,7 +6,7 @@ Boid::Boid()
    massa		= 0.4;
    timeElapsed	= 0;
    maxVel		= 20;
-   maxForca		= 2;
+   maxForca		= 5;
    raio			=2;
    
    pos.set(0,0,0);
@@ -21,7 +21,10 @@ void Boid::update(double time_elapsed, Vec3 targetPos, int steeringType)
 {    
    timeElapsed = time_elapsed;      
    
-   steeringForce = steering->calculateSteering(this, targetPos, steeringType);
+   steeringForce = steerToFlock();
+   if(steeringForce.length() < 0.001) {
+	   steeringForce = steering->calculateSteering(this, targetPos, steeringType);
+   }
  
    Vec3 acceleration = steeringForce / massa;
 
@@ -58,7 +61,9 @@ void Boid::render(DisplayListElements::DL_MODE theMode, int theResolucao) {
 	//desenha o actor
 	glPushMatrix();
 	glTranslatef(pos.x, pos.y, pos.z);
-	glColor3f(0.5f, 0.7f, 1.0f);
+//	glColor3f(0.5f, 0.7f, 1.0f);
+	// colcamos a cor conforme a posição noespaço 3d
+	glColor3f((pos.x+50.0f)/100.0f,(pos.y+50.0f)/100.0f,(pos.z+50.0f)/100.0f);
 	glScalef(3, 3, 3);
 	DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
 	glPopMatrix();
@@ -111,17 +116,45 @@ Vec3 Boid::steerToFlock (void)
 	//	const Vec3 avoidance = steerToAvoidObstacles (2.0f, obstacles);
 	//	if (avoidance != Vec3::zero) return avoidance;
 
-	const float separationRadius =  10.0f;
+	const float separationRadius =  5.0f;
 	const float separationAngle  = -0.707f;
-	const float separationWeight =  6.0f;
+	const float separationWeight =  16.0f;
 
-	const float alignmentRadius = 11.5f;
+	const float alignmentRadius = 15.5f;
 	const float alignmentAngle  = 0.7f;
-	const float alignmentWeight = 3.7f;
+	const float alignmentWeight = 10.7f;
 
-	const float cohesionRadius = 12.0f;
+	const float cohesionRadius = 30.0f;
 	const float cohesionAngle  = -0.15f;
-	const float cohesionWeight = 4.8f;
+	const float cohesionWeight = 12.8f;
+
+/*
+
+	glPushMatrix();
+	glTranslatef(pos.x, pos.y, pos.z);
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glScalef(separationRadius, separationRadius, separationRadius);
+	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::DL_MODE::WIRED, 2);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(pos.x, pos.y, pos.z);
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glScalef(alignmentRadius, alignmentRadius, alignmentRadius);
+	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::DL_MODE::WIRED, 2);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(pos.x, pos.y, pos.z);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glScalef(cohesionRadius, cohesionRadius, cohesionRadius);
+	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::DL_MODE::WIRED, 2);
+	glPopMatrix();
+	
+	*/
+
 
 	const float maxRadius = std::max (separationRadius,
 		std::max (alignmentRadius,

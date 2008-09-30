@@ -27,6 +27,8 @@ Boid * actorWander;
 Boid * actorFlee;
 Boid * actorSeek;
 
+Boid::BoidGroup boids;
+
 int gResolucao = 0;
 DisplayListElements::DL_MODE gMode = DisplayListElements::WIRED;
 #define RESOLUCOES 7
@@ -66,6 +68,7 @@ void defineLinhasCartesianas(void)
 
 void init(void)
 {
+	srand(time(0));
 	/* Cria as matrizes responsáveis pelo
 	controle de luzes na cena */
 
@@ -111,10 +114,22 @@ void init(void)
 	font    = new GLFont();
 	t1 = clock();
 
+	Boid * temp;
+	for(int i=0; i<100; i++) {
+		temp = new Boid();
+		temp->pos = Vec3::RandomUnitVector()*30.0;
+		boids.push_back(temp);
+	}
+	printf("size %d\n", boids.size());
+
+	for (Boid::BoidIterator i = boids.begin(); i != boids.end(); i++) {
+		(**i).pos.print();
+	}
+
 	atorArrive = new Boid();
 	atorArrive->pos = Vec3::RandomUnitVector()*30.0;
-	atorArrive->vel.set(-10,-10,-10);
-	atorArrive->maxVel = 200;
+//	atorArrive->vel.set(-10,-10,-10);
+//	atorArrive->maxVel = 200;
 //	atorArrive->massa = 3;
 
 	actorWander = new Boid();
@@ -123,7 +138,6 @@ void init(void)
 	actorFlee->pos = Vec3::RandomUnitVector()*30.0;
 	actorSeek = new Boid();
 	actorSeek->pos = Vec3::RandomUnitVector()*30.0;
-
 	defineLinhasCartesianas();
 }
 
@@ -147,7 +161,7 @@ void display(void)
 
 	//Limpa o buffer de pixels e
 	//determina a cor padrão dos objetos.
-
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f (1.0, 1.0, 1.0);
 
@@ -165,16 +179,20 @@ void display(void)
 	glCallList(linhasCartesianas);
 	glPopMatrix();
 
+	//actorWander->update(frame_time, Vec3(0,0,0), WANDER);
+	//atorArrive->update(frame_time, Vec3(50,0,0), ARRIVE);
+	//actorFlee->update(frame_time, actorWander->pos, FLEE);
+	//actorSeek->update(frame_time, actorWander->pos, SEEK);
+
 	actorWander->update(frame_time, Vec3(0,0,0), WANDER);
-	atorArrive->update(frame_time, Vec3(50,0,0), ARRIVE);
-	actorFlee->update(frame_time, actorWander->pos, FLEE);
-	actorSeek->update(frame_time, actorWander->pos, SEEK);
+	atorArrive->update(frame_time, Vec3(0,0,0), WANDER);
+	actorFlee->update(frame_time, Vec3(0,0,0), WANDER);
+	actorSeek->update(frame_time, Vec3(0,0,0), WANDER);
 
 	atorArrive->pos=atorArrive->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 	actorFlee->pos=actorFlee->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 	actorSeek->pos=actorSeek->pos.sphericalWrapAround(Vec3(0,0,0), 100);
 	actorWander->pos=actorWander->pos.sphericalWrapAround(Vec3(0,0,0), 100);
-
 
 	// esfera de contençao dele
 	glPushMatrix();
@@ -196,6 +214,12 @@ void display(void)
 	actorFlee->render(gMode, gResolucao);
 	actorSeek->render(gMode, gResolucao);
 	actorWander->render(gMode, gResolucao);
+
+	for (Boid::BoidIterator j = boids.begin(); j != boids.end(); j++) {
+		(**j).update(frame_time, Vec3(0,0,0), WANDER);
+		(**j).pos=(**j).pos.sphericalWrapAround(Vec3(0,0,0), 100);
+		(**j).render(gMode, gResolucao);
+	}
 
 	// Executa os comandos
 	glutSwapBuffers();
@@ -295,7 +319,7 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize (1024, 768);
+	glutInitWindowSize (800, 600);
 	glutInitWindowPosition (100, 0);
 	glutCreateWindow ("Teste Steering");
 	init ();
