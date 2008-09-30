@@ -203,12 +203,16 @@ void Steering::render(Boid *actor, DisplayListElements::DL_MODE theMode, int the
 	if( steeringType == WANDER )
 	{
 		//desenha o circulo na frente do actor
+/*
 		glPushMatrix();
 		glColor3f(1,0,0);
 		glTranslated(target.x, target.y, target.z);
 		glScalef(wanderRadius, wanderRadius, wanderRadius);
 		DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
 		glPopMatrix();
+		
+		*/
+
 
 		//desenha o target
 		glPushMatrix();
@@ -218,7 +222,8 @@ void Steering::render(Boid *actor, DisplayListElements::DL_MODE theMode, int the
 		DisplayListElements::desenhaEsferasDisplayList(theMode, theResolucao);
 		glPopMatrix();
 	}
-
+	// gambiarra apagar isso
+	steeringType = FLEE;
 	//desenha o muro
 	//glColor3f(0,1,0);
 	//glPushMatrix();
