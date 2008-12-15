@@ -144,10 +144,9 @@ namespace {
 
 			if(smoothedPosition().y < -10 ) {
 				//adicionar força contraria aqui ;)
-				float modificador = (smoothedPosition().y * + 10)/10;
+				float modificador = (smoothedPosition().y + 9)/10.0;
 				applySteeringForce (velocity()* modificador, elapsedTime);
 			} else {
-
 				applySteeringForce (gravity (), elapsedTime);
 			}
 
@@ -176,16 +175,16 @@ namespace {
             if (avoidance != Vec3::zero) return avoidance;
 
             const float separationRadius =  10.0f;
-            const float separationAngle  = -0.707f;
-            const float separationWeight =  12.0f;
+            const float separationAngle  = -1.0f;
+            const float separationWeight =  50.0f;
 
-            const float alignmentRadius = 15.5f;
-            const float alignmentAngle  = 0.7f;
+            const float alignmentRadius = 12.5f;
+            const float alignmentAngle  = -1.0f;
             const float alignmentWeight = 5.7f;
 
-            const float cohesionRadius = 30.0f;
-            const float cohesionAngle  = -0.15f;
-            const float cohesionWeight = 7.8f;
+            const float cohesionRadius = 15.0f;
+            const float cohesionAngle  = -1.0f;
+            const float cohesionWeight = 1.8f;
 
             const float maxRadius = maxXXX (separationRadius,
                                             maxXXX (alignmentRadius,
@@ -207,17 +206,19 @@ namespace {
             const Vec3 separation = steerForSeparation (separationRadius,
                                                         separationAngle,
                                                         neighbors);
-            const Vec3 alignment  = steerForAlignment  (alignmentRadius,
-                                                        alignmentAngle,
-                                                        neighbors);
+			const Vec3 alignment  = Vec3::zero; //steerForAlignment  (alignmentRadius,
+                                                //        alignmentAngle,
+                                                //        neighbors);
             const Vec3 cohesion   = steerForCohesion   (cohesionRadius,
                                                         cohesionAngle,
                                                         neighbors);
 
+			if(separation.length()> 5) { printf("X"); }
+			if(separation.length()< 0.2) { printf("x"); }
             // apply weights to components (save in variables for annotation)
-            const Vec3 separationW = separation * separationWeight;
+            const Vec3 separationW = separation * separationWeight; //separation.truncateLength(separationWeight);
             const Vec3 alignmentW = alignment * alignmentWeight;
-            const Vec3 cohesionW = cohesion * cohesionWeight;
+            const Vec3 cohesionW = cohesion.truncateLength(cohesionWeight);//cohesion * cohesionWeight;
 
             // annotation
             // const float s = 0.1;
@@ -225,7 +226,7 @@ namespace {
             // annotationLine (position, position + (alignmentW  * s), gOrange);
             // annotationLine (position, position + (cohesionW   * s), gYellow);
 
-            return separationW + alignmentW + cohesionW;
+            return (separationW + alignmentW + cohesionW);
         }
 
 
