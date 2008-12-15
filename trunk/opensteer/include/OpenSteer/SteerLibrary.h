@@ -814,8 +814,9 @@ steerForSeparation (const float maxDistance,
     AVIterator flockEndIter = flock.end();
     for (AVIterator otherVehicle = flock.begin(); otherVehicle != flockEndIter; ++otherVehicle )
     {
-        if (inBoidNeighborhood (**otherVehicle, radius()*3, maxDistance, cosMaxAngle))
+		if (predictNearestApproachTime (**otherVehicle) > 0 && inBoidNeighborhood (**otherVehicle, radius()*3, maxDistance, cosMaxAngle))
         {
+			
             // add in steering contribution
             // (opposite of the offset direction, divided once by distance
             // to normalize, divided another time to get 1/d falloff)
@@ -827,7 +828,6 @@ steerForSeparation (const float maxDistance,
             ++neighbors;
         }
     }
-
     // divide by neighbors, then normalize to pure direction
     // bk: Why dividing if you normalize afterwards?
     //     As long as normilization tests for @c 0 we can just call normalize
@@ -838,7 +838,7 @@ steerForSeparation (const float maxDistance,
         steering = steering.normalize();
     }
     */
-    steering = steering.normalize();
+//    steering = steering.normalize();
     
     return steering;
 }
@@ -899,7 +899,7 @@ steerForCohesion (const float maxDistance,
     // for each of the other vehicles...
     for (AVIterator otherVehicle = flock.begin(); otherVehicle != flock.end(); otherVehicle++)
     {
-        if (inBoidNeighborhood (**otherVehicle, radius()*3, maxDistance, cosMaxAngle))
+        if (predictNearestApproachTime (**otherVehicle) < 0 && inBoidNeighborhood (**otherVehicle, radius()*3, maxDistance, cosMaxAngle))
         {
             // accumulate sum of neighbor's positions
             steering += (**otherVehicle).position();
@@ -911,7 +911,7 @@ steerForCohesion (const float maxDistance,
 
     // divide by neighbors, subtract off current position to get error-
     // correcting direction, then normalize to pure direction
-    if (neighbors > 0) steering = ((steering / (float)neighbors) - position()).normalize();
+    if (neighbors > 0) steering = ((steering / (float)neighbors) - position());//.normalize();
 
     return steering;
 }
