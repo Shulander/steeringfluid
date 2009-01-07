@@ -1,0 +1,32 @@
+[título]
+Estudo e aperfeiçoamento da técnica de steering behaviors na simulação física de fluidos em um espaço tridimensional
+[motivação/definição do problema,]
+A criação de cenários envolventes para jogos é, como já descrito, uma tarefa árdua e que vem tomando grandes proporções nos últimos anos e demandando cada vez mais investimento pelas equipes de desenvolvimento. 
+A possibilidade de aplicar métodos destinados a outros fins corrobora com a importância do mesmo no meio científico, assim caso seja possível aplicar técnicas como steering behaviors na simulação de fluidos consolidará ainda mais a importância do mesmo, o qual primeiramente foi criado para simular comportamento de personagens virtuais controlados pelo sistema poderá ser aplicado no desenvolvimento de animação física e elementos de imersão no ambiente virtual do jogo.
+Técnicas de simulação de fluídos vem sendo estudadas há vários anos junto com uma abordagem física o qual tenta simular o mundo real em ambientes virtuais. O aumento da capacidade de processamento dos sistemas computacionais tornou possível utilizar técnicas cada vez mais robustas e realistas de simulação de representação da realidade em ambientes virtuais interativos. Aumentando assim a expectativa dos usuários por ambientações mais real e condizente com o mundo externo. Por esse motivo se torna indispensável a busca por novas formas representar o mundo real nesses ambientes virtuais.
+
+[detalhamento da solução,]
+Construção de um cenário tridimensional com o objetivo de validar a pesquisa com resultados. A pesquisa consiste em utilizar a tecnologia de steering 
+Será utilizada linguagem de programação C/C++ para a codificação da solução juntamente com OpenGl para exibição gráfica dos resultados, OpenGl é uma API gráfica aberta.
+[CUDA]
+A tecnologia CUDA (Compute Unified Device Architecture) permite a programação de placas gráficas utilizando linguagem C. Devido as tecnologias empregadas nas atuais GPUs (Graphics Processing Unit) para acompanhar o crescimento do mercado de jogos incluindo a adição de multiplos processadores de próposito geral o poder de processamento das GPUs ultrapassaram a capacidade de processamento das CPUs (Central processing unit), isso as torna uma fonte mais barata de processamento que CPUs para determinadas aplicações.
+Essa poderá ser aplicada para paralelizar o processamento dos elementos do cenário de teste, a utilização da GPU em um caso de tem processamento paralelo tem demostrado grande eficacia em casos em que o problema possa ser particionado em pequenos fragmentos possibilitando utilizar os vários processadores de uso geral que as placas de vídeo atuais disponibilizam.
+A tecnologia de steering behaviors será utilizada para simular o dinamismo entre as particulas, primeiramente criada para simular comportamento de grupo e de movimentação de elementos em um ambiente a mesma é baseada em forças o que possibilita a criação de um cenário em que as partículas sejam guiadas pela interação de forças com forças externas (gravidade, formato do recepiente) e as demais partículas. Porém junto com a possibilidade de uso dessa metodologia apareceram algumas dificuldades a serem estudadas para chegar a um resultado visualmente coerente, entre eles podemos citar:
+Evitar o acrescimo de forças no sistema:
+	Esse é um problema diagnoticado pela próprio funcionamento dos steering behaviors, pois as forças (atração, coesão, repulsão) não se limitam a utilizar a energia que cada partícula possui, assim novas forças são adicionadas pelos próprios elementos para reagir a estimulos do ambiente;
+Gravidade:
+	Para testes preliminares, já realizados, foi adicionada uma força constante no sistema para simular a ação da gravidade sobre as particulas, porém a mesma deve ser ajustadas para solucionar problemas que a mesma trouxe, entre eles a aplicação desnecessária de forças em casos em que a particula não possa reagir a aquele estimulo (colisão com o fundo de um recepiente);
+Definição das forças que guiarão o sistema:
+	Para que o sistema funcione conforme as espectativas, é necessário definir quais forças atuarão no mesmo, quais serão necessárias para que as particulas reajam e gerem um resultado esperado. Essas forças podem ser forças básicas como exemplo, alinhamento, coesão, repulsão ou complexas como viscosidade, turbulência, correnteza e forças de ambiente como gravidade. A definição dessas forças e a influência das mesmas sobre o sistema é de vital importância para o dinamismo do sistema e a representação adequada do mesmo.
+Reação das partículas com o ambiente:
+	A interação das partículas com o ambiente também é um fator importante para o sistema. Existe duas abordagens possíveis de ser utilizada, a primeira utiliza os objetos como limitadores das partículas, essa fará com que quando as partículas atigirem uma região de colisão ou de interação com o objeto a mesma simplesmente é impedida de prosseguir; a segunda abordagem é representar os objetos por forças, essa abordagem traz um dinamismo maior ao ambiente porém traz limitações a solução, como por exemplo caso a particula possua uma força maior que a de repulsão do objeto a mesma atravessará o mesmo o que é uma ação inesperada.
+Relação entre espacial das partículas:
+	As partículas não devem interferir em todo o ambiente de simulação, pois a importância das mesmas é localizada, afetando somente seus vizinhos próximos, a contribuição de uma partícula no cenário diminui com o afastamento da região de processamento, assim uma partícula somente contribui significativamente para a simulação em uma subregião do ambiente a qual ela está localizada. É necessário definir o quanto as partículas interferem no ambiente a sua volta, agrupando as partículas em grupos. Esse agrupamento possibilitará o processamento independete do grupo de partículas facilitando a paralelização do processo muito importante para a útilização de GPU no processamento do mesmo.
+[planejamento ]
+	[ que foi feito,]
+	Revisão bibliográfica,
+	Estudo de CUDA,
+	Alguns testes de simulação utilizando o OpenSteer, o mesmo apresentou resultados interessantes, porém o mesmo é muito complexo e não prorporciona a interface necessária para trabalhar na solução do problema
+	[o que falta fazer, ]
+	Definição das forças, 
+	[cronograma de execução]
