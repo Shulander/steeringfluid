@@ -2,3 +2,28 @@
 \label{capitulo:implementacao}
 
 \section{Definição de forças}
+\subsection{Gravidade}
+Para simulação de grupo de elementos em um sistema de steering behaviors a geralmente gravidade no mundo não é relevante para o resultado esperado, porém em uma representação gráfica de fluídos a gravidade é importante para o correto fluxo dos elementos e da representação correta dos elementos.
+A gravidade foi implementada como uma força que age constantemente sobre todos os elementos do sistema. Essa força faz com que os elementos formam um fluxo em direção em que força está atuando.
+\subsection{Coesão}
+\subsection{Separação}
+\subsection{Alinhamento}
+\subsection{Atrito / Viscosidade}
+\subsection{Região de atuação da vizinhança}
+Na implementação dos steering behaviors cada elemento possui um campo de visão baseado no angulo definido de sua frente, essa região define qual a área em que é para levar em consideração a interação entre outros elementos, elementos fora dessa área ou raio não são relevantes para determinar as forças que estão atuando atualmente no elemento. Essa região pode ser melhor visualizada na figura ~\ref{fig:neighborhood}.
+\begin{figure}
+\centering
+\resizebox{7cm}{!}{\includegraphics{figuras/neighborhood.png}}
+\caption{Região de vizinhança de um elemento}
+\label{fig:neighborhood}
+\end{figure}
+A restrição da atuação é utilizada nos casos em que os boids devem manter-se em deslocamento e os boids que vem atras do mesmo não são relevantes nesse processo. TODO AQUI:  CONTINUAR COM A IDEIA.
+
+\subsection{Interação com paredes do recipiente}
+\subsection{Comportamento das forças}
+\subsubsection{Estabilidade e entropia}
+O problema de estabilidade ocorre pela funcionamento básico do {\it steering behavior}, o mesmo não utiliza a energia existente no elemento nas forças de interação com a vizinhança, a força é criada fazendo com que o sistema não chegue a uma estabilidade. Como essa é uma característica intrínseca ao funcionamento do {\it steering behavior}, a mesma não pode ser alterada ou removida, sendo necessário desenvolver uma metodologia baseada em forças para que essas a entropia do sistema se estabilize. Algumas regras foram definidas para que o sistema tendesse ao equilibrio, essas regras são de perda e adição de energia ao sistema.
+\begin{itemize}
+\item Perda de energia pelo sistema. Como no mundo real o atrito e a interação das moléculas fazem com que o sistema tenda a se estabilizar, em nosso sistema os elementos perdem sua velocidade quando próximos a outros elementos (caracterizando a viscosidade) e quando interagindo com a parede do recipiente (caracterizando o atrito com outros elementos
+\item Adição de energia somente. A força somente será criada quando for necessária e guardando as proporções dos eventos.
+\end{itemize}
