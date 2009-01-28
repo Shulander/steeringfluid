@@ -25,6 +25,8 @@ A força de separação é um elemento importante na simulação de fluídos, a mesma v
 A região de atuação da força de separação corresponde com a distância esperada em que as particulas permanecam separadas uma das outras, analogamente podemos relacionar com a densidade do fluído, pois quanto mais próximas as partículas se estabilizarem mais difícil sera desloca-las na interação com outros elementos, dado que a força de repulsão do grupo a um elemento novo é maior devido ao somatório das forças resultantes do grupo. 
 
 \subsection{Alinhamento}
+A força de alinhamento direciona os elementos a se alinharem com o grupo que pertence a região de alinhamento.
+[Acredito que não sera utilizado]
 
 
 \subsection{Região de atuação da vizinhança}
@@ -36,7 +38,7 @@ Na implementação dos steering behaviors cada elemento possui um campo de visão b
 \caption{Região de vizinhança de um elemento}
 \label{fig:neighborhood}
 \end{figure}
-A restrição da atuação é utilizada nos casos em que os boids devem manter-se em deslocamento e os boids que vem atras do mesmo não são relevantes nesse processo. TODO:  CONTINUAR COM A IDEIA.
+A restrição da atuação é utilizada nos casos em que os elementos devem manter-se em movimentacao. TODO:  CONTINUAR COM A IDEIA.
 
 
 \subsection{Interação com paredes do recipiente}
@@ -50,7 +52,7 @@ A restrição da atuação é utilizada nos casos em que os boids devem manter-se em 
 
 \subsubsection{Estabilidade e entropia}
 \label{sec:impl_reg_entropia}
-O problema de estabilidade ocorre pela funcionamento básico do {\it steering behavior}, o mesmo não utiliza a energia existente no elemento nas forças de interação com a vizinhança, a força é criada fazendo com que o sistema não chegue a uma estabilidade. Como essa é uma característica intrínseca ao funcionamento do {\it steering behavior}, a mesma não pode ser alterada ou removida, sendo necessário desenvolver uma metodologia baseada em forças para que essas a entropia do sistema se estabilize. Algumas regras foram definidas para que o sistema tendesse ao equilíbrio, essas regras são de perda e adição de energia ao sistema.
+O problema de instabilidade ocorre pela funcionamento básico do {\it steering behavior}, o mesmo não utiliza a energia existente no elemento na adição das forças de interação com a vizinhança, a força é criada fazendo com que o sistema não se estabilize. A criação de forças é uma característica intrínseca ao funcionamento do {\it steering behavior} fazendo com que a mesma não possa ser alterada ou removida, sendo necessário desenvolver uma metodologia baseada em forças para que essas a entropia do sistema se estabilize. Algumas regras foram definidas para que o sistema tendesse ao equilíbrio, essas regras são de perda e adição de energia ao sistema.
 \begin{itemize}
 \item Perda de energia pelo sistema. Como no mundo real o atrito e a interação das moléculas fazem com que o sistema tenda a se estabilizar, em nossa abordagem os elementos perdem sua velocidade quando próximos a outros elementos (caracterizando a viscosidade) e quando interagindo com a parede do recipiente (caracterizando o atrito com outros elementos
 \item Adição de energia somente. A força somente será criada quando for necessária e guardando as proporções dos eventos.
