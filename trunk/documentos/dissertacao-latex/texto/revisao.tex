@@ -7,7 +7,28 @@
 Com o objetivo de criar uma solução para ~\cite{reynolds-99-steering} so pode ~\ref{fig:steer_separation} \ref{fig:steer_alignment}
 \ref{fig:steer_cohesion}
 
-Em seu estudo de 1987 ~\cite{reynolds-99-steering} Reynolds desenvolveu uma metodologia diferente dos caminhos pré programados existentes no tratamento comportamentais ligados a grupos de indivíduos em seu deslocamento natural. A simulação de grupos pode ser relacionado como uma modificação de um sistema de partículas e sua simulação é criada através de um sistema distribuído de um modelo comportamental parecido com um sistema natural de movimentação em grupo. A movimentação e escolha de caminho é feita através da percepção do ambiente em que o mesmo é inserido, as regras físicas e de movimentação e por um conjunto de comportamentos programados.
+Em seu estudo de 1987 ~\cite{reynolds-99-steering} Reynolds desenvolveu uma metodologia diferente dos caminhos pré programados existentes no tratamento comportamentais ligados a grupos de indivíduos. A simulação de grupos pode ser relacionado como uma modificação de um sistema de partículas e sua simulação é criada através de um sistema distribuído de um modelo comportamental, sistema esse parecido com um sistema natural de movimentação em grupo. A movimentação e escolha de caminho é feita através da percepção do ambiente em que o mesmo é inserido, as regras físicas e de movimentação e por um conjunto de comportamentos programados.
+O comportamento de personagens autônomos podem ser dividido em camadas para melhor compreensão. Essas camadas podem ser vistas na figura \ref{fig:motion_behaviors_hierarchy} aonde a mesma é dividida em três camadas: seleção de ação, direcionamento e locomoção.
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/motion_behaviors_hierarchy.png}}
+\caption{Hierarquia do comportamento de movimentação}
+\label{fig:motion_behaviors_hierarchy}
+\end{figure}
+\begin{itemize}
+\item Selecão de ação: é responsável pela percepção do mundo e determinação de objetivos;
+\item Direcionamento: decompõem os objetivos em sub tarefas de movimentação (aproximação do objetivo, desvio de obstáculos);
+\item Locomoção: utiliza as informações passadas pela camada de direcionamento para realizar o deslocamento físico do personagem.
+\end{itemize}
+
+O steering behavior é focado na camada do central de direcionamento.
+
+This paper will focus on steering, the middle layer of the behavioral hierarchy. It will
+briefly describe a simple model of the locomotion layer, but only in enough detail to
+provide a concrete foundation for the discussion of various steering behaviors. There will
+be some brief discussion of action selection, but primarily in the context of combining
+and blending basic steering behaviors.
+
 A utilização de forças para direcionar elementos em uma simulação de grupo foi proposta por Reynolds em 1999 ~\cite{reynolds-99-steering} chamando-a de {\it steering behavior} a qual é uma versão melhorada de seu estudo de 1987. As simulações podem ser utilizadas em comportamentos como: busca, perseguição, fuga, perambular, aproximação, desvio de obstáculos e forças de direcionamentos relacionadas a grupo de personagens, aonde modelo proposto é estruturado em três forças, as quais direcionam os elementos do grupo individualmente baseado na velocidade e posição dos elementos vizinhos, essas forças são: separação, alinhamento e coesão e podem ser vistas nas figuras ~\ref{fig:steer_separation} \ref{fig:steer_alignment}
 \ref{fig:steer_cohesion} respectivamente.
 
