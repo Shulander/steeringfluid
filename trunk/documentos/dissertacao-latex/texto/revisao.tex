@@ -8,7 +8,10 @@ Com o objetivo de criar uma solução para ~\cite{reynolds-99-steering} so pode ~\
 \ref{fig:steer_cohesion}
 
 Em seu estudo de 1987 ~\cite{reynolds-99-steering} Reynolds desenvolveu uma metodologia diferente dos caminhos pré programados existentes no tratamento comportamentais ligados a grupos de indivíduos. A simulação de grupos pode ser relacionado como uma modificação de um sistema de partículas e sua simulação é criada através de um sistema distribuído de um modelo comportamental, sistema esse parecido com um sistema natural de movimentação em grupo. A movimentação e escolha de caminho é feita através da percepção do ambiente em que o mesmo é inserido, as regras físicas e de movimentação e por um conjunto de comportamentos programados.
-O comportamento de personagens autônomos podem ser dividido em camadas para melhor compreensão. Essas camadas podem ser vistas na figura \ref{fig:motion_behaviors_hierarchy} aonde a mesma é dividida em três camadas: seleção de ação, direcionamento e locomoção.
+
+A utilização de forças para direcionar elementos em uma simulação de grupo foi proposta por Reynolds em 1999 ~\cite{reynolds-99-steering} chamando-a de {\it steering behavior} a qual é uma versão melhorada de seu estudo de 1987. As simulações podem ser utilizadas em comportamentos como: busca, perseguição, fuga, perambular, aproximação, desvio de obstáculos e forças de direcionamentos relacionadas a grupo de personagens, aonde modelo proposto é estruturado em três forças, as quais direcionam os elementos do grupo individualmente baseado na velocidade e posição dos elementos vizinhos, essas forças são: separação, alinhamento e coesão.
+
+O comportamento de personagens autônomos podem ser dividido em camadas comportamentais para melhor compreensão. Essas camadas podem ser vistas na figura \ref{fig:motion_behaviors_hierarchy}, são elas: seleção de ação, direcionamento e locomoção.
 \begin{figure}
 \centering
 \resizebox{10cm}{!}{\includegraphics{figuras/motion_behaviors_hierarchy.png}}
@@ -21,16 +24,96 @@ O comportamento de personagens autônomos podem ser dividido em camadas para melh
 \item Locomoção: utiliza as informações passadas pela camada de direcionamento para realizar o deslocamento físico do personagem.
 \end{itemize}
 
-O steering behavior é focado na camada do central de direcionamento.
+O steering behavior é focado na camada do central de direcionamento o qual é responsável pelas forças que atuam sobre o elemento a fim de que ele alcance o objetivo inicial definido na camada de seleção de ação. Como forma de representar essa camada foi utilizado um modelo veicular simples. Esse modelo é simples o suficiente para representar os mais variados tipos de transporte ou formas de movimentação que se deseja.
 
-This paper will focus on steering, the middle layer of the behavioral hierarchy. It will
-briefly describe a simple model of the locomotion layer, but only in enough detail to
-provide a concrete foundation for the discussion of various steering behaviors. There will
-be some brief discussion of action selection, but primarily in the context of combining
-and blending basic steering behaviors.
+O veículo é baseado em uma aproximação do ponto de massa. Essa abordagem proporciona um simples e computacionalmente barato modelo físico, porém o mesmo não pode ser considero um modelo físico completo pois o mesmo e capaz de representar o momento linear (velocidade) porém não é capaz de representar o momento rotacional pois o veículo é representado por um ponto de massa não dimensional.
 
-A utilização de forças para direcionar elementos em uma simulação de grupo foi proposta por Reynolds em 1999 ~\cite{reynolds-99-steering} chamando-a de {\it steering behavior} a qual é uma versão melhorada de seu estudo de 1987. As simulações podem ser utilizadas em comportamentos como: busca, perseguição, fuga, perambular, aproximação, desvio de obstáculos e forças de direcionamentos relacionadas a grupo de personagens, aonde modelo proposto é estruturado em três forças, as quais direcionam os elementos do grupo individualmente baseado na velocidade e posição dos elementos vizinhos, essas forças são: separação, alinhamento e coesão e podem ser vistas nas figuras ~\ref{fig:steer_separation} \ref{fig:steer_alignment}
-\ref{fig:steer_cohesion} respectivamente.
+Um ponto de massa é definido pelas propriedades {\it position} e {\it mass} que representam respectivamente a posição e a massa do elemento. O veículo ainda possui a propriedade {\it velocity} representando a velocidade, a velocidade é modificada pela aplicação de forças. As forças e a velocidade aplicada ao veículo possuem um limitador, sendo esse a representação das limitações físicas do próprio veículo, como a aceleração, representada pela propriedade {\it max\_force} e uma limitação de velocidade, causada pelo atrito ou outros fatores, representado pela propriedade {\it max\_speed}. A orientação ({\it orientation}) representa a direção do veículo a qual junto com posição do veículo representa a coordenada espacial na qual o modelo geométrico do veículo pode ser anexado.
+
+{\tt Simple Vehicle Model:\\
+	mass			scalar\\
+	position		vector\\
+	velocity		vector\\
+	max\_force		scalar\\
+	max\_speed		scalar\\
+	orientation		N basis vectors }
+
+A física do modelo veicular simples é baseada no FORWARD EULER INTEGRATION. A cada iteração da simulação, as forças determinadas pelo comportamento são aplicadas ao ponto de massa do veículo. Isso produz uma aceleração igual a força de deslocamento dividido pela massa do veículo. A aceleração é adicionada a antiga velocidade produzindo uma nova velocidade, a qual é truncada por max\_speed. E por fim a  velocidade é adicionada à antiga posição do veículo.
+
+{\tt 
+steering\_force = truncate (steering\_direction, max\_force)\\
+acceleration = steering\_force / mass\\
+velocity = truncate (velocity + acceleration, max\_speed)\\
+position = position + velocity }
+
+O modelo veicular simples mantém-se alinhado com a velocidade por ajustes incrementais das iterações prévias. O sistema local de coordenadas é definido em por quatro vetores: vetor posição especificando o local da origem, e três vetores de direção servindo como base vetorial do espaço. A base vetorial  indica a direção e comprimento das unidades de coordenadas, no qual três direções mutualmente perpendicular relativas ao veículo. Esses eixos serão referenciados por {\it forward, up} e {\it side} (esses correspondem aos eixos x, y e z do R3).
+
+Para manter o alinhamento com a velocidade em cada iteração, o vetor base deve ser rotacionado para a nova direção. Ao invés de usar rotações explicitas, o sistema local é reconstruido usando a combinação de substituição, aproximação e reortogonalização. A nova velocidade é utilizada para calcular a nova direção e uma nova aproximação para a nova direção de {\it up}. Utilizando o produto vetorial é reconstruido o no sistema vetorial base:
+
+{\tt 
+new\_forward = normalize (velocity)
+approximate\_up = normalize (approximate\_up) // if needed
+new\_side = cross (new\_forward, approximate\_up)
+new\_up = cross (new\_forward, new\_side) }
+
+A ideia básica é que o {\it up} aproximado é quase perpendicular a nova direção de {\it forward}, porque as diferenças a cada iteração da orientação são tipicamente pequenas. A nova direção {\it side} será perpendicular ao novo {\it forward}, pela definição do produto vetorial. O novo {\it up} será o produto vetorial entre {\it forward} e {\it side} logo é perpendicular a cada um deles.
+
+O conceito do alinhamento da velocidade não especifica somente uma orientação. O grau de liberdade correspondente a rotação sobre o eixo {\it forward} (também conhecido como inclinação) permanece não limitado. Construindo um novo espaço local relativo ao primeiro é garantido que a inclinação permanece consistente. Definir o valor correto de inclinação requere heurísticas futuras, baseada na intenção de uso do modelo veicular.
+
+Nesse sistema veicular simples, o sinal de controle passado da camada comportamental de direcionamento para a camada de movimentação consiste em exatamente um vetor quantidade: uma força de direcionamento desejada. Mais realisticos modelos veiculares poderá ter varios diferentes conjuntos de sinais de controles. Por exemplo um automovel teria um volante de direção, acelerador e freio os quais cada um podem ser representados por quantidades escalares. É possível mapear um vetor força de direcionamento generalizado nesses sinais escalares: o componente {\it side} do vetor direcionamento pode ser interpretado como o sinal de direção, o {\it forward} pode ser mapeado em no acelerador caso positovo ou freio caso negativo. Esse mapeamento pode ser assimétrico, por exemplo um automóvel pode desacelerar através da freagem muito mais rápido que acelerar através do impulso do motor como mostrado na Figura ~\ref{fig:asymmetrical_steering_forces}.
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/asymmetrical_steering_forces.png}}
+\caption{Forças de direcionamento assimétricas}
+\label{fig:asymmetrical_steering_forces}
+\end{figure}
+
+Por causa dessa concepção de alinhamento à velocidade, esse sistema veicular simples não pode simular efeitos como derrapagem. Além do mais esse modelo permite que o veículo gire com sua velocidade em zero, esse problema pode ser resolvido adicionando um limitador na mudança de orientação, ou limitando o componente de direcionamento lateral em velocidades baixas, ou simulado o momento de inércia.
+
+\subsection{Modelos de {\it Steering Behaviors}}
+Para cada {\it steering behavior} específico assumiremos que a movimentação seja implementada pelo modelo veícular simples previamente descrito, o qual é parametrizada por um simples vetor força de direcionamento.
+
+\subsubsection{{\it Seek}}
+O comportamento {\it seek} (perseguição a um ponto estático) atua no direcionamento do personagem a uma posição fixa especificada no mundo virtual. Esse comportamento coordena o personagem em uma velocidade radialmente alinhada para o alvo. A velocidade desejada é um vetor na direção do personagem para o ponto de objetivo. O módulo da velocidade desejada pode ser {\tt max\_speed}, ou pode ser a velocidade corrente do personagem, dependendo da aplicação. O vetor de direcionamento é a diferença entre a velocidade desejada e a velocidade corrente do personagem conforme a Figura ~\ref{fig:steering_seek_flee}.
+
+\begin{figure}
+\centering
+\resizebox{12cm}{!}{\includegraphics{figuras/steering_seek_flee.png}}
+\caption{Comportamento de {\it seek} e {\it flee}}
+\label{fig:steering_seek_flee}
+\end{figure}
+
+{\tt desired\_velocity = normalize (position - target) * max\_speed \\
+ steering = desired\_velocity - velocity }
+
+Caso o personagem continue com o comportamento de {\it seek}, ele eventualmente passará pelo objetivo e após voltará para uma nova aproximação. Isso produzirá um movimento parecido com o movimento de moscas ao redor de uma lâmpada, diferente do comportamento de {\it arrival} a seguir.
+
+\subsubsection{{\it Flee}}
+O comportamento de {\it flee} é simplesmente o inverso do {\it seek}, atuando no direcionamento do personagem a se afastar de um ponto fixo especificado. A velocidade desejada apontará para a direção oposta formada entre o personagem e o ponto de objetivo verificado na Figura ~\ref{fig:steering_seek_flee}.
+
+\subsubsection{{\it Pursuit}}
+O comportamento de {\it pursuit} é similar ao {\it seek} exceto que o alvo é outro personagem móvel. Uma perseguição efetiva requer a previsão da futura posição do alvo. Uma das abordagens é usar um simples previsor que reavalia a cada iteração a futura posição do alvo. Como exemplo pode se usar um previsor linear basedo na velocidade o qual leva em conta que o alvo não mudara de direção durante o intervalo da previsão. O mesmo avalia a posição do personagem T unidades de tempo no futuro e ajusta a velocidade escalonando-a pelo período T previsto. O direcionamento de {\it pursuit} é um simples resultado da aplicação do comportamento de seek na posição prevista do alvo. Verifique a Figura ~\ref{fig:steering_pursuit_evasion}.
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_pursuit_evasion.png}}
+\caption{Comportamento de {\it pursuit} e {\it evasion}}
+\label{fig:steering_pursuit_evasion}
+\end{figure}
+
+A chave para a implementação do {\it pursuit} é o método usado para estimar o intervalo T de predição. No caso ideal o intervalo T deveria ser o tempo até a interceptação, mas o valor é desconhecido pelo fato do alvo realizar mudanças de rota imprevisíveis. T pode assumir um valor constante, o qual deve produzir melhor perseguição que o comportamento simples {\it seek} (o qual corresponde T=0). No entanto, para uma performance aceitável T deve ser maior quando o perseguidor está longe do objetivo, e menor quando ele está próximo. Outros métodos para estimar o valor de T podem ser utilizados dependendo do ambiente no qual será aplicado e do comportamento esperado.
+
+\subsubsection{{\it Evasion}}
+O comportamento de {\it evasion} é análoga a de {\it pursuit}, exceto que o comportamento de {\it flee} é utilizado para direcionar para longe da posição futura estimada. 
+
+As técnicas de perseguição e evasão dadas aqui tem a intenção de serem computacionalmente leves e são não-ótima, existem técnicas ótimas na literatura porém em um sistema natural a evasão é intencionalmente não-ótima com o objetivo de ser imprevisível, permitindo assim que frustre estratégias de perseguição previsíveis [Cliff 96].
+
+%\subsubsection{{\it Offset pursuit}}
+%O comportamento de {\it offset pursuit} refere-se a um direcionamento de um caminho o qual passa próximo, mas não através de um alvo movel. A ideia básica é dinamicamente calcular um ponto alvo o qual está distanciado por um raio R da predição futura do objetivo. e após usar o comportamento {\it seek} para aproximar desse ponto
+
+
+e podem ser vistas nas figuras ~\ref{fig:steer_separation} \ref{fig:steer_alignment} \ref{fig:steer_cohesion} respectivamente.
 
 {\it itálico}
 {\bf negrito}
