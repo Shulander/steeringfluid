@@ -4,9 +4,6 @@
 
 \section{Steering Behaviors}
 
-Com o objetivo de criar uma solução para ~\cite{reynolds-99-steering} so pode ~\ref{fig:steer_separation} \ref{fig:steer_alignment}
-\ref{fig:steer_cohesion}
-
 Em seu estudo de 1987 ~\cite{reynolds-99-steering} Reynolds desenvolveu uma metodologia diferente dos caminhos pré programados existentes no tratamento comportamentais ligados a grupos de indivíduos. A simulação de grupos pode ser relacionado como uma modificação de um sistema de partículas e sua simulação é criada através de um sistema distribuído de um modelo comportamental, sistema esse parecido com um sistema natural de movimentação em grupo. A movimentação e escolha de caminho é feita através da percepção do ambiente em que o mesmo é inserido, as regras físicas e de movimentação e por um conjunto de comportamentos programados.
 
 A utilização de forças para direcionar elementos em uma simulação de grupo foi proposta por Reynolds em 1999 ~\cite{reynolds-99-steering} chamando-a de {\it steering behavior} a qual é uma versão melhorada de seu estudo de 1987. As simulações podem ser utilizadas em comportamentos como: busca, perseguição, fuga, perambular, aproximação, desvio de obstáculos e forças de direcionamentos relacionadas a grupo de personagens, aonde modelo proposto é estruturado em três forças, as quais direcionam os elementos do grupo individualmente baseado na velocidade e posição dos elementos vizinhos, essas forças são: separação, alinhamento e coesão.
@@ -75,6 +72,7 @@ Por causa dessa concepção de alinhamento à velocidade, esse sistema veicular sim
 Para cada {\it steering behavior} específico assumiremos que a movimentação seja implementada pelo modelo veícular simples previamente descrito, o qual é parametrizada por um simples vetor força de direcionamento.
 
 \subsubsection{{\it Seek}}
+\label{sec:rev_seek}
 O comportamento {\it seek} (perseguição a um ponto estático) atua no direcionamento do personagem a uma posição fixa especificada no mundo virtual. Esse comportamento coordena o personagem em uma velocidade radialmente alinhada para o alvo. A velocidade desejada é um vetor na direção do personagem para o ponto de objetivo. O módulo da velocidade desejada pode ser {\tt max\_speed}, ou pode ser a velocidade corrente do personagem, dependendo da aplicação. O vetor de direcionamento é a diferença entre a velocidade desejada e a velocidade corrente do personagem conforme a Figura ~\ref{fig:steering_seek_flee}.
 
 \begin{figure}
@@ -112,33 +110,78 @@ As técnicas de perseguição e evasão dadas aqui tem a intenção de serem computaci
 %\subsubsection{{\it Offset pursuit}}
 %O comportamento de {\it offset pursuit} refere-se a um direcionamento de um caminho o qual passa próximo, mas não através de um alvo movel. A ideia básica é dinamicamente calcular um ponto alvo o qual está distanciado por um raio R da predição futura do objetivo. e após usar o comportamento {\it seek} para aproximar desse ponto
 
+\subsubsection{{\it Arrival}}
+O comportamento de {\it Arrival} é idêntico ao {\it seek} aonde o personagem está longe do objetivo. Porém ao invés de mover através do alvo com sua velocidade máxima, este comportamento causa uma diminuição de velocidade para o personagem conforme se aproxima do objetivo, eventualmente reduzindo a velocidade até parar no alvo, conforme mostrado na Figura \ref{fig:steering_arrival}. A distância a qual a desaceleração inicia é um parametro do comportamento. Esta implementação é similar ao {\it seek}: uma velocidade desejada é determinada direcionando o personagem para o objetivo. Fora do raio de parada a velocidade é cortada em {\tt max\_speed}, interior ao raio de parada, a velocidade é reduzida até atingir zero (ao encontrar o alvo).
 
-e podem ser vistas nas figuras ~\ref{fig:steer_separation} \ref{fig:steer_alignment} \ref{fig:steer_cohesion} respectivamente.
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_arrival.png}}
+\caption{Comportamento de {\it Arrival}}
+\label{fig:steering_arrival}
+\end{figure}
+
+{\tt target\_offset = target - position \\
+distance = length (target\_offset) \\
+ramped\_speed = max\_speed * (distance / slowing\_distance) \\
+clipped\_speed = minimum (ramped\_speed, max\_speed) \\
+desired\_velocity = (clipped\_speed / distance) * target\_offset \\
+steering = desired\_velocity - velocity }
+
+\subsection{Comportamentos de grupo}
+Os próximos três {\it steering behaviors}: {\it separation}, {\it cohesion} e {\it alignement}, são destinados a grupos de personagens. Em cada caso, o {\it steering behavior} determina como o personagem reage com outro personagem em sua vizinhança local. {personagens fora da vizinhança local são ignorados. Como mostrados na Figura \ref{fig:steering_local_neighborhood}, a vizinhança é especificada por uma distância ({\it distance}) o qual define quando os dois personagens estão próximos, e um ângulo ({\it angle}) o qual define o campo de visão do personagem.
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_local_neighborhood.png}}
+\caption{Vizinhança local}
+\label{fig:steering_local_neighborhood}
+\end{figure}
+
+\subsubsection{{\it Separation}}
+\label{sec:rev_separation}
+O comportamento de {\it separation} dá ao personagem a habilidade de manter certa distância de separação de outros personagens próximos. Esta poe se usada para prevenir que personagem se aglomerem. Para calcular a força de separação, primeiro é realizada uma busca para encontrar personagens dentro da vizinhança especificada. Esta pode ser uma busca exaustiva de todos os personagens da simulação, ou pode ser utilizado algum tipo de partição espacial ou um sistema de cache para limitar a busca a personagens locais. Para cada personagem local, a força de repulsão é calculada pela subtração das posições entre o personagem e seus vizinhos, normalizando e aplicando um peso inversamente proporcional à distância entre eles (r). A força de repulsão para cada personagem próximo é somada para produzir uma força de direcionamento global, veja a Figura ~\ref{fig:steering_separation}.
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_separation.png}}
+\caption{Comportamento de separação ({\it separation})}
+\label{fig:steering_separation}
+\end{figure}
+
+\subsubsection{{\it Cohesion}}
+O comportamento de {\it cohesion} da ao personagem a habilidade de se aproximar de um grupo formado de outros personagens próximos, conforme Figura \ref{fig:steering_cohesion}. No direcionamento para a coesão é realizada a busca de todos os personagens da vizinhança local (conforme descrito previamente para a separação na seção ~\ref{sec:rev_separation}), calculando a posição média do grupo de personagens. A força de direcionamento pode ser aplicada na direção da posição média ou pode ser usada como objetivo para o comportamento de {\it seek}~\ref{sec:rev_seek}.
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_cohesion.png}}
+\caption{Comportamento de coesão ({\it cohesion})}
+\label{fig:steering_cohesion}
+\end{figure}
+
+\subsubsection{{\it Alignment}}
+O comportamento de {\it alignment} da ao personagem a abilidade de se alinhar com outros personagens proximos, como mostrado na Figura \ref{fig:steering_alignment}. O direcionamento de alinhamento é calculado buscando todos os personagens da vizinhança local (conforme descrito previamente para a separação na seção ~\ref{sec:rev_separation}), calculando a média dos vetores velocidade de todos os personagens próximos. Essa média é a velocidade desejada, assim o vetor de direcionamento é a diferença entre a média e a velocidade atual do personagem. Esse direcionamento tenderá a girar nosso personagem alinhando com o grupo.
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_alignment.png}}
+\caption{Comportamento de alinhamento ({\it alignment})}
+\label{fig:steering_alignment}
+\end{figure}
+
+\subsubsection{{\it Flocking}}
+O comportamento de {\it flocking} é obtido pela combinação dos comportamentos de separação, cohesion e alinhamento. Essa combinação é capaz de produzir modelos comportamentais como multidão, rebanho e cardumes ~\cite{reynolds-87-flocks}. Para algumas aplicações é suficiente a simples soma entre os três vetores para produzir uma simples direcionamento de {\it flocking}. Porém para um melhor controle os três componentes são normalizados e posteriormente escalonados por três fatores individuais antes de soma-los. Como resultado, o comportamento de {\it flocking} é especificado por nove parametros numéricos: um peso (colaboração individual do comportamento), uma distância e um angulo (para determinar a vizinhança, veja Figura \ref{fig:steering_local_neighborhood}) para cada um dos três comportamentos, conforme a Figura \ref{fig:steering_flocking} a seguir.
+
+
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/steering_flocking.png}}
+\caption{Comportamento de ({\it flocking})}
+\label{fig:steering_flocking}
+\end{figure}
 
 {\it itálico}
 {\bf negrito}
 {\tt código}
-
-\begin{figure}
-\centering
-\resizebox{5cm}{!}{\includegraphics{figuras/steer_separation.png}}
-\caption{Separação: {\it Steer} para evitar o agrupamento com elementos vizinhos}
-\label{fig:steer_separation}
-\end{figure}
-
-\begin{figure}
-\centering
-\resizebox{5cm}{!}{\includegraphics{figuras/steer_alignment.png}}
-\caption{Alinhamento: {\it Steer} com objetivo de alinhar o elemento com seus vizinhos}
-\label{fig:steer_alignment}
-\end{figure}
-
-\begin{figure}
-\centering
-\resizebox{5cm}{!}{\includegraphics{figuras/steer_cohesion.png}}
-\caption{Coesão: {\it Steer} de agrupamento com os elementos vizinhos}
-\label{fig:steer_cohesion}
-\end{figure}
 
 Falar sobre reinolds, boids, birds e afins.
 \subsection{Mecânica}
