@@ -1,6 +1,70 @@
 \chapter{Introdução} 
 %\label{capitulo:introducao}
-teste001
+Por "animação de fluidos" entendemos a geração de uma seqüência de
+imagens digitais ilustrando a evolução do fluido ao longo de um intervalo de tempo.
+Este conjunto de imagens deve ser capaz de reproduzir o movimento do fluido de
+forma convincente, ou seja, o fluido deve escoar com o grau de realismo necessário
+para o contexto da animação que está sendo gerada.
+
+Dentro desta perspectiva, a animação de fluidos tem natureza multidisciplinar,
+e seu desenvolvimento depende da interação entre profissionais das áreas de
+computação e engenharia. Objetivamente, para atingir o grau de realismo
+necessário, é preciso que as equações de fluidos sejam convenientemente tratadas
+e que as técnicas de visualização de dados utilizadas possam gerar imagens com a
+aparência realista. As técnicas utilizadas no processo de visualização são oriundas
+da computação gráfica. As equações de fluidos são derivadas de conceitos da
+mecânica clássica. É oportuno fazer a seguir alguns comentários gerais destas
+áreas. Nos capítulos seguintes, estes temas serão devidamente detalhados.
+
+Dificilmente este sistema
+apresenta solução analítica, o que obriga os especialistas a lançarem mão dos
+recursos da análise numérica e de métodos numéricos para discretizar o problema e
+obter uma solução com um nível de aproximação aceitável.
+
+No caso particular de cenários envolvendo animações de fluidos, a utilização
+de métodos em Dinâmica de Fluidos Computacional (DFC) tem se mostrado um
+recurso valioso para os animadores, diminuindo o custo, bem como o tempo de
+produção de filmes, tais como The Prince of Egypt [Witting (1999)] ou Shrek [Enright
+(2002)].
+
+A necessidade de se buscar métodos em DFC para auxiliar a geração de
+efeitos visuais envolvendo fluidos vem da dificuldade para executar tal tarefa, com o
+grau de realismo necessário, com métodos puramente geométricos. Fluidos são
+sistemas com um número muito elevado de graus de liberdade, o que torna
+impraticável animá-los com realismo sem fazer uso de princípios físicos para guiar o
+trabalho de designers experientes.
+
+Os métodos encontrados na literatura para animação de fluidos, baseados em
+modelos de DFC, são fundamentados nas equações de Navier-Stokes, com técnicas
+de discretização baseadas em diferença finitas implícitas [Stam (1999)] e explicitas
+[Foster-Metaxas (1997)], bem como em métodos Lagrangeanos tais como Método
+das Características [Stam (1999)], Smoothed Particle Hidrodynamics (SPH)
+[Desbrun-Gascuel (1998)] e Moving-Particle Semi-Implicit (MPS) [Premoze at al.(2003)].
+
+O método SPH é independente de malhas (assim como o MPS) e vem sendo
+aplicado com sucesso em problemas de engenharia, tais como simulação de fluidos
+compressíveis, para a descrição da dinâmica de materiais, estudo de explosões e
+fenômenos de transporte [Liu at al. (2003)]. Implementações deste método para
+arquiteturas paralelas têm sido desenvolvidas com o objetivo de melhorar a
+performance do mesmo.
+
+Do ponto de vista da computação gráfica, o fato do SPH não depender de
+uma malha previamente definida é uma vantagem, se comparado com os métodos
+clássicos. As cenas em um filme são em geral dinâmicas, com fronteiras variáveis
+em função de novos objetos que entram na cena à medida que esta se desenvolve.
+Desta forma, métodos que não fazem uso de malhas, podem ser vantajosos por
+evitar o custo extra de re-gerar a malha sempre que tais alterações ocorrem. Estas
+vantagens vêm despertando interesse por pesquisadores em computação gráfica, e
+propostas enfocando a utilização do SPH para a geração de efeitos visuais já podem
+ser encontradas na literatura [Müller at al. (2003)], [Amada(2004)].
+
+As pesquisas em animação de fluidos se dividem basicamente em três
+etapas. Primeiramente, temos a busca de novos modelos em DFC que sejam mais
+eficientes do ponto de vista da computação gráfica. Esta etapa envolve tanto a
+pesquisa de novos modelos físicos quanto o ajuste de modelos já conhecidos, sem
+perder de vista o fato de que o objetivo final é a geração de efeitos visuais, e não a
+descrição de fenômenos naturais.
+
 \section{Contexto e Motivação}
 
 teste ~\ref{fig:steering_separation} \textit{italico-asdfasf} teste-ifem \textbf{negrito} conforme a imagem ~\ref{capitulo:introducao}
