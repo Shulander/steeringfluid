@@ -1,17 +1,30 @@
 \chapter{Proposta} 
 \label{capitulo:proposta}
 
+Abardagens de trabalhos relacionados
+- Pingo em copo dagua
+%analogias entre de interação particula agua e tubarão - cardume de peixes.
+A interação de um corpo estranho com a superfície do fluído segue a seguinte ordem: repulsão das partículas que formam a superfície do fluído, afastamento do volume liquido para a entrada do novo corpo, retorno do fluido e preenchimento do espaço deslocado. O afastamento pode ser relacionado com o comportamento de repulsão do steering behaviors aonde os elementos são repelidos ao entrarem na região de proximidade limite, o afastamento do fluído é similar ao primeiro contato, diferenciando na força de repulsão aplicada, esse comportamento pode ser melhor visualizado na sequência de imagens da Figura [adicionar figura aqui]. O retorno se da de forma similar a repulsão, como as partículas foram comprimidas com o deslocamento lateral as mesmas saem de uma região de estabilidade e são forçadas a entrar em uma região de repulsão dos elementos fazendo com que eles sejam forçados a se reorganizar e preencher os espaços vazios do recipiente.
+	
+- barco gerando ondas
+- escorregamento superficial de um corpo
+- representação de superfícies com realismo. (ver muller)
+
+- falar sobre o motivo de representação por esferas ( realismo é aplicado após um resultado satisfatorio na simulacao)
+
 \section{Problema proposto}
 Proposta do projeto, como funcionarão as forças para simular fluidos (viscosidade, interação entre os elementos, perda de energia)
 
-\subsection{OpenSteer}
-Falar sobre o framework OpenSteer, dificuldades, funcionalidades e aplicações.
-
-\section{Dificuldades Encontradas}
-
+\section{Entendimento do Problema}
 \subsection{Definição dos steerings}
 Falar dos steerings utilizados e como eles afetam os elementos
 Falar da interação dos elementos
 
 \subsection{Controle da Entropia}
-Falar do problema de adição constante de energia ao sistema, e falar que é uma caracteristica do próprio sistema de steering behaviors criar novas forças para simular o comportamento dos elementos, sendo necessário um controle para que o sistema se estabilize.
+Falar do problema de adição constante de energia ao sistema, e falar que é uma característica do próprio sistema de steering behaviors criar novas forças para simular o comportamento dos elementos, sendo necessário um controle para que o sistema se estabilize.
+
+\section{Estratégias de implementação}
+
+\subsection{OpenSteer}
+Falar sobre o framework OpenSteer, dificuldades, funcionalidades e aplicações.
+Falar sobre a necessidade de implementar um framework proprio para o entendimento do OpenSteer
