@@ -1,30 +1,151 @@
 \chapter{Proposta} 
 \label{capitulo:proposta}
-
-Abardagens de trabalhos relacionados
-- Pingo em copo dagua
-%analogias entre de interação particula agua e tubarão - cardume de peixes.
-A interação de um corpo estranho com a superfície do fluído segue a seguinte ordem: repulsão das partículas que formam a superfície do fluído, afastamento do volume liquido para a entrada do novo corpo, retorno do fluido e preenchimento do espaço deslocado. O afastamento pode ser relacionado com o comportamento de repulsão do steering behaviors aonde os elementos são repelidos ao entrarem na região de proximidade limite, o afastamento do fluído é similar ao primeiro contato, diferenciando na força de repulsão aplicada, esse comportamento pode ser melhor visualizado na sequência de imagens da Figura [adicionar figura aqui]. O retorno se da de forma similar a repulsão, como as partículas foram comprimidas com o deslocamento lateral as mesmas saem de uma região de estabilidade e são forçadas a entrar em uma região de repulsão dos elementos fazendo com que eles sejam forçados a se reorganizar e preencher os espaços vazios do recipiente.
-	
-- barco gerando ondas
-- escorregamento superficial de um corpo
-- representação de superfícies com realismo. (ver muller)
-
-- falar sobre o motivo de representação por esferas ( realismo é aplicado após um resultado satisfatorio na simulacao)
-
-\section{Problema proposto}
-Proposta do projeto, como funcionarão as forças para simular fluidos (viscosidade, interação entre os elementos, perda de energia)
-
 \section{Entendimento do Problema}
+A proposta desse trabalho visa utilizar a técnica de {\it steering behaviors} na simulação de fluido, como previamente explicado essa técnica utiliza a combinação de forças de direcionamento para direcionar os elementos em um cenário. Em contrapartida as técnicas tradicionais de simulação de fluídos baseado em partículas utilizam a transferência de energia entre as partículas para realizar a simulação, as constantes trocas de forças (ou energia no caso da simulação física) entre os elementos movimentam as partículas.
+
+A simulação de fluidos para computação gráfica não é baseado em realismo mas sim no resultado visual, assim a interação entre as partículas de {\it behaviors } adequando corretamente as forças podem resultar em uma simulação coerente para a utilização da mesma em ambientes tridimensionais de jogos ou animações. As forças e os próprios steerings devem ser modificados ou ajustados para que o resultado adequado seja alcançado.
+
+Como futuro trabalho pode ser vinculado a este relacionando os {\it behaviors } da simulação com propriedades dos fluídos como exemplo: quais forças devem ser alteradas para mudarmos o comportamento de viscosidade do fluído, se é possível alterar a viscosidade trabalhando com as forças e o tamanho da região de interação dos {\it behaviors }; ou a possibilidade de simularmos a interação de fluidos de densidades diferentes alterando as regiões de vizinhança dos elementos as forças que parametrizam essas regiões. O objetivo desse trabalho é de relacionar a possibilidade de simular algumas características ou casos específicos de fluidos utilizando a metodologia de direcionamento por forças.
+
+%\subsection{Abordagens de trabalhos relacionados}
+%Trabalhos relacionados com simulação de fluidos 
+
+\subsection{Relação entre as abordagens}
+A interação de um corpo estranho com a superfície do fluído segue a ordem: repulsão das partículas que formam a superfície do fluído, afastamento do volume liquido para a entrada do novo corpo, retorno do fluido e preenchimento do espaço deslocado. 
+
+A repulsão pode ser relacionado com o comportamento de repulsão do {\it steering behaviors} aonde os elementos são repelidos ao entrarem na região de proximidade limite, o afastamento do fluído é similar à repulsão da primeira etapa, diferenciando na força de repulsão aplicada, esse comportamento pode ser melhor visualizado na sequência de imagens da Figura [adicionar figura aqui]. A diferença de forças funcionará de forma automática por causa da velocidade de aproximação do corpo estranho, quanto maior a velocidade mais próximo do elemento o mesmo se situará ao ser computado as forças que atuarão sobre o elemento fazendo com que a força de repulsão seja relativamente alta quando comparado com a próxima etapa aonde ocorre a diminuição na velocidade do novo corpo (reação a força de repulsão dos elementos que já se encontram no recipiente) e os elementos são repelidos quando estão mais afastados. 
+
+O retorno se da de forma similar a repulsão, como as partículas foram comprimidas com o deslocamento lateral as mesmas saem de uma região de estabilidade e são forçadas a entrar em uma região de repulsão entre os elementos vizinhos fazendo com que eles sejam forçados a se reorganizar e preencher os espaços vazios do recipiente.
+	
+% barco gerando ondas
+% escorregamento superficial de um corpo
+% representação de superfícies com realismo. (ver muller)
+
+% falar sobre o motivo de representação por esferas ( realismo é aplicado após um resultado satisfatorio na simulacao)
+\subsection{Representação}
+A representação realista é muito importante para uma melhor visualização dos elementos, porém a mesma é somente deve ser levada em consideração após um resultado satisfatório na simulação.
+A representação dos elementos será dada através de esferas, as esferas representarão as partículas do fluido as quais por métodos previamente utilizados por Müller ~\cite{Muller2003} podem ser usadas para formar uma superfície do fluido as quais podem ser vistas na Figura \ref{fig:fluid-surface-technics}. Na Figura \ref{fig:fluid-surface-technics} (a) verificamos as partículas utilizadas na simulação realizada, em (b) foi utilizada a técnica de {\it marching cubes} ~\cite{Lorensen1987}.
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/fluid-surface-technics.png}}
+\caption{Formas de representação de fluídos.}
+\label{fig:fluid-surface-technics}
+\end{figure}
+O trabalho tem por objetivo buscar o realismo da simulação de fluidos para computação gráfica e não de representação visual o qual pode ser tratado posteriormente, por esses motivos as técnicas de criação de superfícies não serão tratadas nesse trabalho.
+
 \subsection{Definição dos steerings}
 Falar dos steerings utilizados e como eles afetam os elementos
 Falar da interação dos elementos
 
 \subsection{Controle da Entropia}
+
 Falar do problema de adição constante de energia ao sistema, e falar que é uma característica do próprio sistema de steering behaviors criar novas forças para simular o comportamento dos elementos, sendo necessário um controle para que o sistema se estabilize.
 
 \section{Estratégias de implementação}
+Como base de implementação é necessário a implementação dos comportamentos de direcionamentos necessários como base programacional da solução proposta, surgiu a proposta da criação de um sistema de behaviors próprio o qual resultou na compreensão do funcionamento da biblioteca OpenSteer. O OpenSteer é uma biblioteca desenvolvida em C++ destinada a ajudar a implementação de steering behaviors para personagens autônomos aplicado a jogos e animação. A escolha do uso da biblioteca OpenSteer se deve  pelos seguintes fatores: implementação validada e testada [citation needed], desenvolvido pelo Craig Reynolds criador da técnica de {\it steering behaviors}, sua implementação abrange as especificações e técnicas especificadas no trabalho original ~\cite{reynolds-99-steering}.
 
 \subsection{OpenSteer}
-Falar sobre o framework OpenSteer, dificuldades, funcionalidades e aplicações.
-Falar sobre a necessidade de implementar um framework proprio para o entendimento do OpenSteer
+Esta seçao resumirá os componentes relevantes do fremework desenvolvido criado por Reynolds denominado OpenSteer.
+OpenSteer é uma biblioteca {\it open source} de componentes que facilita a construção de ambientes para jogos e simulações multi-agentes que façam uso de {\it steering behaviors} para personagens autônomos. Esses agentes podem representar personagens (humanos, animais), veículos (carros, aviões, espaçonaves) ou outros tipos de agentes móveis. OpenSteer é multiplataforma, suportando atualmente Linux, Windows e Mac OS X, informações não encontrado nesse documento podem ser encontradas na página do projeto ~\cite{ReynoldsOpenSteer2003}.
+
+OpenSteer prove um kit de ferraments para {\it steering behaviors}, definidas em termos deum agente movel chamado {\it vehicle}. Para permitir uma facil integraçao com engines de jogos existentes o OpenSteer pode ser adicionado como uma camada ou por herança de código. O mesmo foi criado para ser utilizado por programadores e não da suporte como ferramenta interativa de produção.
+
+\subsubsection{OpenSterDemo}
+Em adição a biblioteca, OpenSteer fornece uma aplicação interativa chamada OpenSteerDemo o qual possui vários behaviors implementados e prove um ambiente que facilita a vizulização de resultados e facilidade para corrigir problemas através de sua interface. O OpenSteerDemo é desenvolvido em C++ e usa a API Gráfica OpenGL e todas as chamas OpenGL são separadas em um módulo possibilitando a troca da mesma caso seja necessário.
+
+O OpenSterDemo é baseado em uma arquitetura {\it plug-in}, isso é, módulos podem ser facilmente adicionados. Um {\it plug-in} para OpenSteerDemo especifica várias ações genéricas requeridas pelo OpenSteerDemo framework: {\tt open, close, reset, run one simulation step, display one frame, etc}, o mesmo também define as classes veícular e gerencia a simulação.
+
+O sistema de {\it plug-in} do OpenSteerDemo permite que o desenvolvedor crie rapidamente um protótipo de um comportamento durante o {\it game design}.
+
+O OpenSteerDemo possui um sistema de relogio interno com dois tipos de contagem diferentes: {\it real time} e {\it simulation time}. O tempo de simulação é normalmente segue o tempo real da simulação mas também pode ser pausada, congelando a simulação. Pausando a simulação permite examinar as informações em detalhes ou reposicionar a câmera. O relógio pode continuar sua execução de três formas diferentes conformes descritas abaixo:
+
+\begin{itemize}
+\item {\it Frame rate} variável: utilizado para visualização de simulações em tempo real. As atualizações ocorrem o mais rapido possível. Os passos da simulação são proporcionais ao tempo passado desde o último update;
+\item {\it Frame rate} fixo: utilizado para visualização de simulações em tempo real. As atualizações são forçadas a ocorrer em quantias fixas de {\it frame rate} aguardando até o início do próximo frame. Caso o update leve muito tempo o mesmo deve aguardar até o início da próxima janela de atualização;
+\item Modo de animação: Para executar passos fixos da simulação, geralmente não é em tempo real, ignorando o tempo real para produzir resultados consistentes da simulação.
+\end{itemize}
+
+A Figura \ref{fig:typical_SteerTest} mostra uma simulação de pedestres em um ambiente bidimensional utilizando o framework. Esse exemplo faz parte dos {\it plug-in} que acompanham o OpenSteerDemo.
+\begin{figure}
+\centering
+\resizebox{12cm}{!}{\includegraphics{figuras/typical_SteerTest.png}}
+\caption{Simulação de pedestres utilizando OpenSteer}
+\label{fig:typical_SteerTest}
+\end{figure}
+
+\subsubsection{{\it Steering Library}}
+
+%wander
+{\bf Wander behavior}
+
+{\tt Vec3 steerForWander (float dt);}
+
+Retorna a força para o comportamento de {\it wander} (perambular).
+
+%seek
+{\bf Seek behavior }
+
+{\tt Vec3 steerForSeek (const Vec3\& target);}
+
+Retorna a força para o comportamento de {\it seek}, faz com que o veículo seja direcionado para o objetvo e o move para esse.
+
+%flee
+{\bf Flee behavior }
+
+{\tt Vec3 steerForFlee (const Vec3\& target);}
+
+Retorna a força para o comportamento de {\it flee}, a qual faz com que o veículo se afaste do alvo.
+
+%pursuit
+{\bf Pursuit behavior}
+
+{\tt Vec3 steerForPursuit (const AbstractVehicle\& quarry);}
+
+{\tt Vec3 steerForPursuit (const AbstractVehicle\& quarry, const float maxPredictionTime);}
+
+Retorna a força de direcionamento de perseguição a outro veículo em movimento
+
+%evasion
+{\bf Evasion behavior }
+
+{\tt Vec3 steerForEvasion (const AbstractVehicle\& menace, const float maxPredictionTime);}
+
+Retorna a força de direcionamento para evadir da aproximação de outro veículo, se afastando do ponto de interceptação.
+
+%separation
+{\bf Separation behavior}
+
+{\tt Vec3 steerForSeparation (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
+
+Retorna a força para afastar o veículo dos elementos vizinhos.
+%alignment
+{\bf Alignment behavior}
+
+{\tt Vec3 steerForAlignment (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
+
+Retorna a força que alinha o veículo aos seus vizinhos.
+
+%cohesion
+{\bf Cohesion behavior}
+
+{\tt Vec3 steerForAlignment (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
+
+Retorna a força que tende a mover o veículo para o "centro de massa" do grupo de vizinhança.
+
+%path following
+{\bf Path Following behavior }
+
+{\tt Vec3 steerToFollowPath (const int direction, const float predictionTime, Pathway\& path)}
+
+{\tt Vec3 steerToStayOnPath (const float predictionTime, Pathway\& path)}
+
+Retorna a força para para acompanhar um caminho predefinido. {\tt steerToStayOnPath } apenas tenta manter o veículo no caminho enquanto {\tt steerToFollowPath} prove um acompanhamento direcionado de caminho.
+
+\subsubsection{Funcionalidades não implementadas}
+Alguns comportamentos principais detalhados no artigo de Reynolds ~\cite{reynolds-99-steering} não foram implementadas ainda no OpenSteer. São eles: {\it offset pursuit}, {\it arrival}, {\it wall following}, {\it containment}, {\it flow field following} e {\it leader following}. Outros comportamentos citados de passagem no artigo não foram implementados.
+
+O OpenSteer não prove uma restrição de não penetração em outros elementos (obstáculos e outros veículos) o que pode ocasionar falhas visuais na simulação.
+
+Alguns componentes da API do OpenSteer não estão documentos além dos comentários existentes nos arquivos de cabeçalho ({\it header files}).
+
+%implementacao do elementos (nao liquido) que interagirá com o sistema, implementar por behavior ou por um elemento fisico como as paredes do recepiente.
