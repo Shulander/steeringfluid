@@ -6,14 +6,13 @@
 Para simulação de grupo de elementos em um sistema de steering behaviors a geralmente gravidade no mundo não é relevante para o resultado esperado, porém em uma representação gráfica de fluídos a gravidade é importante para o correto fluxo dos elementos e da representação correta dos elementos.
 A gravidade foi implementada como uma força que age constantemente sobre todos os elementos do sistema. Essa força faz com que os elementos formam um fluxo em direção em que força está atuando.
 
-
 \subsection{Coesão}
 A coesão consiste em uma região, geralmente mais externa, na qual os elementos tendem a se aproximar do centro do grupo.
 A coesão entre as partículas faz com que as mesmas tendam a não se separar do grupo, esse comportamento é esperado na representação de fluídos uma vez que as partículas tendem a manter-se unidas na simulação.
 Em nossa implementação estudamos a força de coesão em nossa simulação nas seguintes condições:
 \begin{itemize}
 \item Comportamento original: os elementos se atraem com igual força não importando em qual região de vizinhança o elemento se encontra, nesse caso em especial o comportamento de agrupamento dos elementos funcionava conforme esperado, porém com a força de separação ~\ref{sec:impl_separacao} adicionando força de forma exponencial ao inverso da distância entre os elementos, o sistema reagia com divergência do funcionamento esperado.
-\item Força exponencial: os elementos são atraídos através de uma força exponencial proporcional à distância entre os elementos do grupo, assim quanto mais afastado do centro e mais próximo da fronteira da região de vizinhança ~\ref{sec:impl_reg_vizinhanca} maior será a força de atração entre os elementos, e quanto mais próximo da região de separação menor a força fazendo com que os elementos encontrem uma região de transição estável entre a força de separação e coesão. Esse comportamento atuará como um facilitador na solução do problema de estabilização das forças internas do sistema ~\ref{sec:impl_reg_entropia}.
+\item Força exponencial: os elementos são atraídos através de uma força exponencial proporcional à distância entre os elementos do grupo, assim quanto mais afastado do centro e mais próximo da fronteira da região de vizinhança maior será a força de atração entre os elementos, e quanto mais próximo da região de separação menor a força fazendo com que os elementos encontrem uma região de transição estável entre a força de separação e coesão. Esse comportamento atuará como um facilitador na solução do problema de estabilização das forças internas do sistema ~\ref{sec:impl_reg_entropia}.
 \end{itemize}
 
 Além das modificações comportamental dos steering behaviors citadas, foram realizadas modificações na região de atuação da força e coesão e no seu peso na contribuição final na força resultante do processo de interação com os demais elementos. Com essas modificações espera-se chegar a representação da viscosidade de um fluido. Esse resultado é esperado pelo fato de que a região de coesão é determina a resistência em que os elementos são capaz de separar do grupo principal, quanto menor o for a colaboração na força final de interação mais fácil é da partícula se separar do grupo a qual ele pertence e quanto maior a sua contribuição, mais coeso é o grupo.
@@ -21,33 +20,31 @@ Além das modificações comportamental dos steering behaviors citadas, foram reali
 \subsection{Separação}
 \label{sec:impl_separacao}
 A força de separação tende a afastar os elementos quando internos à região de separação.
-A força de separação é um elemento importante na simulação de fluídos, a mesma vem em substituição da colisão das partículas na simulação clássica de partículas [CITAÇÃO FALTANDO]. Como no steering behaviors os elementos não trabalham com colisão é necessária uma força capaz de separar os elementos quando muito próximos ou quando em rota de colisão. Essa força é diretamente proporcional ao inverso da distância ao quadrado fazendo com que a mesma cresça rapidamente ao se aproximar de outro elemento, fazendo com que ambos sejam repelidos como resultado.
-A região de atuação da força de separação corresponde com a distância esperada em que as particulas permanecam separadas uma das outras, analogamente podemos relacionar com a densidade do fluído, pois quanto mais próximas as partículas se estabilizarem mais difícil sera desloca-las na interação com outros elementos, dado que a força de repulsão do grupo a um elemento novo é maior devido ao somatório das forças resultantes do grupo. 
+A força de separação é um elemento importante na simulação de fluídos, a mesma vem em substituição da transferência de energia pela colisão dos elementos na simulação física de partículas. Como no steering behaviors os elementos não trabalham com colisão é necessária uma força capaz de separar os elementos quando muito próximos ou quando em rota de colisão. Essa força é diretamente proporcional ao inverso da distância ao quadrado fazendo com que a mesma cresça rapidamente ao se aproximar de outro elemento, resultando na separação de ambos os elementos.
+A região de atuação da força de separação corresponde com a distância esperada em que as partículas permaneçam separadas uma das outras, analogamente podemos relacionar com a densidade do fluído, pois quanto mais próximas as partículas se estabilizarem mais difícil sera desloca-las na interação com outros elementos, dado que a força de repulsão do grupo a um elemento novo é maior devido ao somatório das forças resultantes do grupo. 
 
 \subsection{Alinhamento}
-A força de alinhamento direciona os elementos a se alinharem com o grupo que pertence a região de alinhamento.
-[Acredito que não sera utilizado]
+A força de alinhamento direciona os elementos a se alinharem com o grupo que pertence a região de alinhamento. Em testes primários a mesma não esta sendo utilizada, pois para o comportamento das partículas o alinhamento das mesmas não representa uma contribuição importante para o sistema.
 
-
-\subsection{Região de atuação da vizinhança}
-\label{sec:impl_reg_vizinhanca}
-Na implementação dos steering behaviors cada elemento possui um campo de visão baseado no angulo definido de sua frente, essa região define qual a área em que é considerada na interação entre outros elementos. Os elementos fora dessa área ou raio não são relevantes para determinar as forças que estão atuando atualmente no elemento sendo descartados no processamento e restringindo a interação a um grupo de proximidade. Essa região pode ser visualizada na figura ~\ref{fig:neighborhood}.
-\begin{figure}
-\centering
-\resizebox{7cm}{!}{\includegraphics{figuras/neighborhood.png}}
-\caption{Região de vizinhança de um elemento}
-\label{fig:neighborhood}
-\end{figure}
-A restrição da atuação é utilizada nos casos em que os elementos devem manter-se em movimentacao. TODO:  CONTINUAR COM A IDEIA.
+%\subsection{Região de atuação da vizinhança}
+%\label{sec:impl_reg_vizinhanca}
+%Na implementação dos steering behaviors cada elemento possui um campo de visão baseado no angulo definido de sua frente, essa região define qual a área em que é considerada na interação entre outros elementos. Os elementos fora dessa área ou raio não são relevantes para determinar as forças que estão atuando atualmente no elemento sendo descartados no processamento e restringindo a interação a um grupo de proximidade.
+%A restrição da atuação é utilizada nos casos em que os elementos devem manter-se em movimentacao. TODO:  CONTINUAR COM A IDEIA.
 
 
 \subsection{Interação com paredes do recipiente}
+Existem duas abordagens que tratam a interação dos elementos com as paredes do recipiente, abordagem por forças ou uma restrição de movimentação dos elementos. 
+
+Na abordagem por forças o sistema se torna mais genérico, facilitando a interação com os elementos do cenário pois basta determinar uma força restritiva nas paredes do recipiente para que o liquido permaneça em seu interior, essa abordagem possui problemas como a não garantia de que os elementos não atravessarão os limites determinados pois para isso necessitam somente de uma força maior que a força de restrição. 
+
+Em contra partida existe a limitação por restrição de movimentação, isso é, não permitindo que os elementos saiam do espaço definido como recipiente, essa proposta possui a vantagem de que nenhum elemento sairá pelas paredes do recipiente, porém haverá a necessidade de definir uma forma de restrição adicional ao sistema diferente do sistema de forças.
+
+Essas abordagens necessitam de analise para corpos não líquidos que interagirão com o sistema (pedra jogada dentro de um copo de água) pois é necessário definir como esse corpo propagará a informação para os elementos da simulação da existência de um corpo estranho em seu meio, a abordagem de forças é uma abordagem mais genérica, pois basta definir um elemento novo no ambiente o qual possui uma força de repulsão ao se aproximar das regiões definidas como limite espacial do corpo.
+
+%\subsection{Comportamento das forças}
 
 
-\subsection{Comportamento das forças}
-
-
-\subsubsection{Atrito / Viscosidade}
+%\subsubsection{Atrito / Viscosidade}
 
 
 \subsubsection{Estabilidade e entropia}

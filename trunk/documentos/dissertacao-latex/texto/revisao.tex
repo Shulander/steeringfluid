@@ -77,7 +77,7 @@ O comportamento {\it seek} (perseguição a um ponto estático) atua no direcioname
 
 \begin{figure}
 \centering
-\resizebox{12cm}{!}{\includegraphics{figuras/steering_seek_flee.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_seek_flee.png}}
 \caption{Comportamento de {\it seek} e {\it flee}}
 \label{fig:steering_seek_flee}
 \end{figure}
@@ -95,7 +95,7 @@ O comportamento de {\it pursuit} é similar ao {\it seek} exceto que o alvo é out
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_pursuit_evasion.png}}
+\resizebox{8cm}{!}{\includegraphics{figuras/steering_pursuit_evasion.png}}
 \caption{Comportamento de {\it pursuit} e {\it evasion}}
 \label{fig:steering_pursuit_evasion}
 \end{figure}
@@ -115,7 +115,7 @@ O comportamento de {\it Arrival} é idêntico ao {\it seek} aonde o personagem est
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_arrival.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_arrival.png}}
 \caption{Comportamento de {\it Arrival}}
 \label{fig:steering_arrival}
 \end{figure}
@@ -132,7 +132,7 @@ Os próximos três {\it steering behaviors}: {\it separation}, {\it cohesion} e {\
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_local_neighborhood.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_local_neighborhood.png}}
 \caption{Vizinhança local}
 \label{fig:steering_local_neighborhood}
 \end{figure}
@@ -143,7 +143,7 @@ O comportamento de {\it separation} dá ao personagem a habilidade de manter cert
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_separation.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_separation.png}}
 \caption{Comportamento de separação ({\it separation})}
 \label{fig:steering_separation}
 \end{figure}
@@ -153,7 +153,7 @@ O comportamento de {\it cohesion} da ao personagem a habilidade de se aproximar 
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_cohesion.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_cohesion.png}}
 \caption{Comportamento de coesão ({\it cohesion})}
 \label{fig:steering_cohesion}
 \end{figure}
@@ -163,7 +163,7 @@ O comportamento de {\it alignment} da ao personagem a abilidade de se alinhar co
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_alignment.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_alignment.png}}
 \caption{Comportamento de alinhamento ({\it alignment})}
 \label{fig:steering_alignment}
 \end{figure}
@@ -174,7 +174,7 @@ O comportamento de {\it flocking} é obtido pela combinação dos comportamentos de
 
 \begin{figure}
 \centering
-\resizebox{10cm}{!}{\includegraphics{figuras/steering_flocking.png}}
+\resizebox{9cm}{!}{\includegraphics{figuras/steering_flocking.png}}
 \caption{Comportamento de ({\it flocking})}
 \label{fig:steering_flocking}
 \end{figure}
@@ -187,10 +187,16 @@ O comportamento de {\it flocking} é obtido pela combinação dos comportamentos de
 %- Utilizações (citar outras utilizações além de direcionamento de elementos)
 
 \section{Simulação de fluidos}
-	A Dinâmica de Fluidos Computacional (DFC) teve por origem no trabalho de Claude Navier (1822) e George Stokes (1845) os quais formularam a famosa equação de Navier-Stokes que descreve a conservação do momento. Em complemento a esta equação, duas equaçoes adicionais são necessárias para simular fluidos, uma descreve a conservação de massa e outra a conservação de energia. Uma vez definidas as equações é possível empregar a tecnologia de hardware para soluciona-las numericamente.
-	Técnicas de simulação de fluido para propósitos específicos vem sendo desenvolvidas no campo de computação gráfica. Em 1983, ~\cite{reeves-83} introduziu o uso do sistema de partículas como técnica para modelar uma classe de objetos {\it fuzzy}. A partir desse várias aplicações utilizando abordagem Euleriana (baseada em malhas) e Lagrangeana (baseada em partículas) na simulação de fluidos para computação gráfica. Surgiram uso de partículas para animação de objetos deformáveis ~\cite{desbrun-cani-96} e ~\cite{tonnesen-98}, animação de superfícies ~\cite{Lombardo95orientedparticles} e fluxo de lava ~\cite{Stora99animatinglava}. A abordagem Euleriana tem se mostrado mais popular nos últimos anos  para a simulação de fluidos em geral ~\cite{Stam99stablefluids}, água ~\cite{Foster2001}, ~\cite{Enright2002}, ~\cite{Takahashi2002}, objetos deformáveis ~\cite{Nixon2002}. Porém ainda existem poucas técnicas disponíveis para uso em sistemas interativos. O trabalho baseado em malha de Stam ~\cite{Stam99stablefluids} foi certamente um passo importante para a simulação de fluidos em tempo real.
-	
-\subsection{Baseadas em Malha (Eulerian)}
-Stable fluids 
-\subsection{Baseadas em Partículas (Lagrangian)}
-SPH (smoothed particle hydrodynamics)
+A Dinâmica de Fluidos Computacional (DFC) teve por origem no trabalho de Claude Navier (1822) e George Stokes (1845) os quais formularam a famosa equação de Navier-Stokes que descreve a conservação do momento. Em complemento a esta equação, duas equaçoes adicionais são necessárias para simular fluidos, uma descreve a conservação de massa e outra a conservação de energia. Uma vez definidas as equações é possível empregar a tecnologia de hardware para soluciona-las numericamente.
+Técnicas de simulação de fluido para propósitos específicos vem sendo desenvolvidas no campo de computação gráfica. Em 1983, ~\cite{reeves-83} introduziu o uso do sistema de partículas como técnica para modelar uma classe de objetos {\it fuzzy}. A partir desse várias aplicações utilizando abordagem Euleriana (baseada em malhas) e Lagrangeana (baseada em partículas) na simulação de fluidos para computação gráfica. Surgiram uso de partículas para animação de objetos deformáveis ~\cite{desbrun-cani-96} e ~\cite{tonnesen-98}, animação de superfícies ~\cite{Lombardo95orientedparticles} e fluxo de lava ~\cite{Stora99animatinglava}. A abordagem Euleriana tem se mostrado mais popular nos últimos anos  para a simulação de fluidos em geral ~\cite{Stam99stablefluids}, água ~\cite{Foster2001}, ~\cite{Enright2002}, ~\cite{Takahashi2002}, objetos deformáveis ~\cite{Nixon2002}. Porém ainda existem poucas técnicas disponíveis para uso em sistemas interativos. O trabalho baseado em malha de Stam ~\cite{Stam99stablefluids} foi certamente um passo importante para a simulação de fluidos em tempo real.
+Esse texto não tem por objetivo fazer uma revisão exaustiva dos trabalhos em animação computacional de fluidos. Os métodos encontrados na literatura para animação de fluidos via modelos de DFC, são fundamentados nas equações de Navier-Stokes, com técnicas de discretização baseadas em diferença finitas implícitas ~\cite{Stam99stablefluids} e explicitas ~\cite{Foster1997}, bem como em métodos Lagrangianos tais como Smoothed Particle Hidrodynamics (SPH) ~\cite{Liu2003} \cite{Muller2003} e Moving-Particle Semi-Implicit (MPS) ~\cite{Premoze2003}. Como documento adicional de referência para simulação de fluídos recomendo o relatório técnico de Giraldi \cite{Giraldi2005}.
+
+%\subsection{Baseadas em Malha (Eulerian)}
+%Stable fluids
+%\subsection{Baseadas em Partículas (Lagrangian)}
+\subsection{SPH (smoothed particle hydrodynamics)}
+SPH (smoothed particle hydrodynamics) é um método computacional usado para simular fluxo de fluidos. O mesmo é usado em vários campos de pesquisa, incluindo astrofísica, balística, vulcanologia e oceanologia. O mesmo é um método Baseado em partículas ~\cite{Monaghan1988}.
+
+O método de SPH funciona dividindo o fluido em um conjunto de elementos discretos, denominados de partículas. Essas partículas possuem uma distância espacial (conhecida como {\it smoothing length}, tipicamente representado na equação por h), as quais suas propriedades são suavizadas por uma função de {\it kernel}. Isso significa que qualquer valor físico de qualquer partícula pode ser obtido somando as propriedades relevantes de todas as partículas as quais estão nas proximidades do {\it kernell}. 
+
+A contribuição de cada partícula para uma propriedade é proporcional a sua distância com a partícula de interesse e sua densidade. Matematicamente, esta é governada pela função de {\it kernel} (representada por W). A função de {\it kernel} comumente usada inclui uma função gaussiana e uma spline cubica. A ultima função é exatamente zero para partículas mais afastadas que duas suavizações de distância (diferente da Gaussiana, aonde existe uma pequena contribuição a qualquer distância finita). Este tem como vantagem de economizar esforço computacional por não incluir menores contribuições de partículas distantes.  
