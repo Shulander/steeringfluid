@@ -3,9 +3,10 @@
 \section{Entendimento do Problema}
 A proposta desse trabalho visa utilizar a técnica de {\it steering behaviors} na simulação de fluido, como previamente explicado essa técnica utiliza a combinação de forças de direcionamento para direcionar os elementos em um cenário. Em contrapartida as técnicas tradicionais de simulação de fluídos baseado em partículas utilizam a transferência de energia entre as partículas para realizar a simulação, as constantes trocas de forças (ou energia no caso da simulação física) entre os elementos movimentam as partículas.
 
-A simulação de fluidos para computação gráfica não é baseado em realismo mas sim no resultado visual, assim a interação entre as partículas de {\it behaviors } adequando corretamente as forças podem resultar em uma simulação coerente para a utilização da mesma em ambientes tridimensionais de jogos ou animações. As forças e os próprios steerings devem ser modificados ou ajustados para que o resultado adequado seja alcançado.
+A simulação de fluidos para computação gráfica não é baseado em realismo mas sim no resultado visual, assim a interação entre as partículas de {\it behaviors} adequando corretamente as forças podem resultar em uma simulação coerente para a utilização da mesma em ambientes tridimensionais de jogos ou animações. As forças e os próprios steerings devem ser modificados ou ajustados para que o resultado adequado seja alcançado.
 
-Como futuro trabalho pode ser vinculado a este relacionando os {\it behaviors } da simulação com propriedades dos fluídos como exemplo: quais forças devem ser alteradas para mudarmos o comportamento de viscosidade do fluído, se é possível alterar a viscosidade trabalhando com as forças e o tamanho da região de interação dos {\it behaviors }; ou a possibilidade de simularmos a interação de fluidos de densidades diferentes alterando as regiões de vizinhança dos elementos as forças que parametrizam essas regiões. O objetivo desse trabalho é de relacionar a possibilidade de simular algumas características ou casos específicos de fluidos utilizando a metodologia de direcionamento por forças.
+Como linha de trabalho pode ser estudado o relacionamento dos {\it behaviors} da simulação com propriedades dos fluídos como exemplo: quais forças devem ser alteradas para mudarmos o comportamento de viscosidade do fluído, se é possível alterar a viscosidade trabalhando com as forças e o tamanho da região de interação dos {\it behaviors }; ou a possibilidade de simularmos a interação de fluidos de densidades diferentes alterando as regiões de vizinhança dos elementos as forças que parametrizam essas regiões. O objetivo desse trabalho é de relacionar a possibilidade de simular algumas características ou casos específicos de fluidos utilizando a metodologia de direcionamento por forças.
+
 %http://www.cs.utah.edu/vissim/papers/ParticleFluid/
 %\subsection{Abordagens de trabalhos relacionados}
 %Trabalhos relacionados com simulação de fluidos 
@@ -34,18 +35,30 @@ A representação dos elementos será dada através de esferas, as esferas represent
 O trabalho tem por objetivo buscar o realismo da simulação de fluidos para computação gráfica e não de representação visual o qual pode ser tratado posteriormente, por esses motivos as técnicas de criação de superfícies não serão tratadas nesse trabalho.
 
 \subsection{Definição dos steerings}
-Falar dos steerings utilizados e como eles afetam os elementos
-Falar da interação dos elementos
+
+Em visualizações de simulação foram constatados semelhanças na dinâmica da movimentação de comportamento em grupo ({\it flocking}) com a simulação de fluidos, algum desses elementos podem ser visualizados na Figura \ref{fig:steering_big-shoal} aonde pode se verificar linhas de fluxo dos elementos através dos obstáculos, os quais se comportaram como escoamento de um fluido através dos elementos do cenário. Essa visualização foi verificado em um ambiente bidimensional, porém o conceito será ampliado e testado em um ambiente tridimensional.
+\begin{figure}
+\centering
+\resizebox{15cm}{!}{\includegraphics{figuras/steering_big-shoal.png}}
+\caption{simulação de cardume por steering behaviors, visualização de padrões de dinâmica de fluidos ~\cite{Buckland2004}.}
+\label{fig:steering_big-shoal}
+\end{figure}
+
+A abordagem inicial será a utilização das forças de direcionamento que compõem o comportamento de {\it flocking} padrão, isso é, coesão, repulsão e alinhamento.
+A força de coesão fará com que os elementos tendam a permanecer unidos, comportamento relacionado ao asfasf do comportamento físico de fluidos.
+A força de separação manterá os mesmos afastados evitando que os mesmos se aglomerem em um único corpo, lembrando que os elementos que forma uma simulação de {\it steering behaviors} não restringe a sobreposição de elementos ou que os mesmos atravessem um ao outro, por isso a força de separação se torna importante na simulação de fluidos.
+A força de alinhamento não será utilizada a principio, essa força faz com que os elementos tendam a permanecer alinhados com o grupo esse comportamento, portanto, poderá ocasionar instabilidade sendo que ao adicionar alguma força ao sistema que venha a modificar a estabilidade do grupo (adição de mais liquido ao recipiente ou de jogar um objeto estranho dentro do mesmo) os elementos tenderão, como primeira reação, a se deslocarem todos para a direção em que estão alinhados fazendo com que os elementos se desloquem para uma direção não esperada. Essa força será estudada e verificado se o seu comportamento corresponde ao esperado nessa análise prévia.
+
 
 \subsection{Controle da Entropia}
 
 Falar do problema de adição constante de energia ao sistema, e falar que é uma característica do próprio sistema de steering behaviors criar novas forças para simular o comportamento dos elementos, sendo necessário um controle para que o sistema se estabilize.
 
 \section{Estratégias de implementação}
-Como base de implementação é necessário a implementação dos comportamentos de direcionamentos necessários como base programacional da solução proposta, surgiu a proposta da criação de um sistema de behaviors próprio o qual resultou na compreensão do funcionamento da biblioteca OpenSteer. O OpenSteer é uma biblioteca desenvolvida em C++ destinada a ajudar a implementação de steering behaviors para personagens autônomos aplicado a jogos e animação. A escolha do uso da biblioteca OpenSteer se deve  pelos seguintes fatores: implementação validada e testada [citation needed], desenvolvido pelo Craig Reynolds criador da técnica de {\it steering behaviors}, sua implementação abrange as especificações e técnicas especificadas no trabalho original ~\cite{reynolds-99-steering}.
+Como base de implementação é necessário a implementação dos comportamentos de direcionamentos necessários como base programacional da solução proposta, surgiu a proposta da criação de um sistema de behaviors próprio o qual resultou na compreensão do funcionamento da biblioteca OpenSteer. O OpenSteer é uma biblioteca desenvolvida em C++ destinada a ajudar a implementação de steering behaviors para personagens autônomos aplicado a jogos e animação. A escolha do uso da biblioteca OpenSteer se deve  pelos seguintes fatores: implementação validada e testada, desenvolvido pelo Craig Reynolds criador da técnica de {\it steering behaviors}, sua implementação abrange as especificações e técnicas especificadas no trabalho original ~\cite{reynolds-99-steering}.
 
 \subsection{OpenSteer}
-Esta seçao resumirá os componentes relevantes do fremework desenvolvido criado por Reynolds denominado OpenSteer.
+Esta seção resumirá os componentes relevantes do fremework criado por Reynolds denominado OpenSteer.
 OpenSteer é uma biblioteca {\it open source} de componentes que facilita a construção de ambientes para jogos e simulações multi-agentes que façam uso de {\it steering behaviors} para personagens autônomos. Esses agentes podem representar personagens (humanos, animais), veículos (carros, aviões, espaçonaves) ou outros tipos de agentes móveis. OpenSteer é multiplataforma, suportando atualmente Linux, Windows e Mac OS X, informações não encontrado nesse documento podem ser encontradas na página do projeto ~\cite{ReynoldsOpenSteer2003}.
 
 OpenSteer prove um kit de ferraments para {\it steering behaviors}, definidas em termos deum agente movel chamado {\it vehicle}. Para permitir uma facil integraçao com engines de jogos existentes o OpenSteer pode ser adicionado como uma camada ou por herança de código. O mesmo foi criado para ser utilizado por programadores e não da suporte como ferramenta interativa de produção.
@@ -73,73 +86,73 @@ A Figura \ref{fig:typical_SteerTest} mostra uma simulação de pedestres em um amb
 \label{fig:typical_SteerTest}
 \end{figure}
 
-\subsubsection{{\it Steering Library}}
+%\subsubsection{{\it Steering Library}}
 
 %wander
-{\bf Wander behavior}
+%{\bf Wander behavior}
 
-{\tt Vec3 steerForWander (float dt);}
+%{\tt Vec3 steerForWander (float dt);}
 
-Retorna a força para o comportamento de {\it wander} (perambular).
+%Retorna a força para o comportamento de {\it wander} (perambular).
 
 %seek
-{\bf Seek behavior }
+%{\bf Seek behavior }
 
-{\tt Vec3 steerForSeek (const Vec3\& target);}
+%{\tt Vec3 steerForSeek (const Vec3\& target);}
 
-Retorna a força para o comportamento de {\it seek}, faz com que o veículo seja direcionado para o objetvo e o move para esse.
+%Retorna a força para o comportamento de {\it seek}, faz com que o veículo seja direcionado para o objetvo e o move para esse.
 
 %flee
-{\bf Flee behavior }
+%{\bf Flee behavior }
 
-{\tt Vec3 steerForFlee (const Vec3\& target);}
+%{\tt Vec3 steerForFlee (const Vec3\& target);}
 
-Retorna a força para o comportamento de {\it flee}, a qual faz com que o veículo se afaste do alvo.
+%Retorna a força para o comportamento de {\it flee}, a qual faz com que o veículo se afaste do alvo.
 
 %pursuit
-{\bf Pursuit behavior}
+%{\bf Pursuit behavior}
 
-{\tt Vec3 steerForPursuit (const AbstractVehicle\& quarry);}
+%{\tt Vec3 steerForPursuit (const AbstractVehicle\& quarry);}
 
-{\tt Vec3 steerForPursuit (const AbstractVehicle\& quarry, const float maxPredictionTime);}
+%{\tt Vec3 steerForPursuit (const AbstractVehicle\& quarry, const float maxPredictionTime);}
 
-Retorna a força de direcionamento de perseguição a outro veículo em movimento
+%Retorna a força de direcionamento de perseguição a outro veículo em movimento
 
 %evasion
-{\bf Evasion behavior }
+%{\bf Evasion behavior }
 
-{\tt Vec3 steerForEvasion (const AbstractVehicle\& menace, const float maxPredictionTime);}
+%{\tt Vec3 steerForEvasion (const AbstractVehicle\& menace, const float maxPredictionTime);}
 
-Retorna a força de direcionamento para evadir da aproximação de outro veículo, se afastando do ponto de interceptação.
+%Retorna a força de direcionamento para evadir da aproximação de outro veículo, se afastando do ponto de interceptação.
 
 %separation
-{\bf Separation behavior}
+%{\bf Separation behavior}
 
-{\tt Vec3 steerForSeparation (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
+%{\tt Vec3 steerForSeparation (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
 
-Retorna a força para afastar o veículo dos elementos vizinhos.
+%Retorna a força para afastar o veículo dos elementos vizinhos.
 %alignment
-{\bf Alignment behavior}
+%{\bf Alignment behavior}
 
-{\tt Vec3 steerForAlignment (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
+%{\tt Vec3 steerForAlignment (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
 
-Retorna a força que alinha o veículo aos seus vizinhos.
+%Retorna a força que alinha o veículo aos seus vizinhos.
 
 %cohesion
-{\bf Cohesion behavior}
+%{\bf Cohesion behavior}
 
-{\tt Vec3 steerForAlignment (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
+%{\tt Vec3 steerForAlignment (const float maxDistance, const float cosMaxAngle, const AVGroup\& flock); }
 
-Retorna a força que tende a mover o veículo para o "centro de massa" do grupo de vizinhança.
+%Retorna a força que tende a mover o veículo para o "centro de massa" do grupo de vizinhança.
 
 %path following
-{\bf Path Following behavior }
+%{\bf Path Following behavior }
 
-{\tt Vec3 steerToFollowPath (const int direction, const float predictionTime, Pathway\& path)}
+%{\tt Vec3 steerToFollowPath (const int direction, const float predictionTime, Pathway\& path)}
 
-{\tt Vec3 steerToStayOnPath (const float predictionTime, Pathway\& path)}
+%{\tt Vec3 steerToStayOnPath (const float predictionTime, Pathway\& path)}
 
-Retorna a força para para acompanhar um caminho predefinido. {\tt steerToStayOnPath } apenas tenta manter o veículo no caminho enquanto {\tt steerToFollowPath} prove um acompanhamento direcionado de caminho.
+%Retorna a força para para acompanhar um caminho predefinido. {\tt steerToStayOnPath } apenas tenta manter o veículo no caminho enquanto {\tt steerToFollowPath} prove um acompanhamento direcionado de caminho.
 
 \subsubsection{Funcionalidades não implementadas}
 Alguns comportamentos principais detalhados no artigo de Reynolds ~\cite{reynolds-99-steering} não foram implementadas ainda no OpenSteer. São eles: {\it offset pursuit}, {\it arrival}, {\it wall following}, {\it containment}, {\it flow field following} e {\it leader following}. Outros comportamentos citados de passagem no artigo não foram implementados.

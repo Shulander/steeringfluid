@@ -1,0 +1,44 @@
+observacoes
+
+- tem que colocar imagens de trabalhos relacionados e falar mais das
+tecnicas e metodologias utilizadas.
+
+- arrumar isso "A animação de fluidos consiste na geração de uma
+sequência de imagens digitais que
+ilustram a evolução do fluido durante o tempo" - nao tem nada a ver.
+
+- tem que expandir a intro
+
+- reveja a motivacao. Tu espera criar uma tecnica mais eficiente e
+melhor que as ja existentes?
+
+- tem que complementar o cap 2 com uma analise das tecnicas
+utilizadas, imagens, alguns comparativos, comentar sobre desempenho,
+complexidade das tecnicas, etc. Houve alguma evolucao nas tecnicas
+utilzadas? alguem buscou um novo paradigma para tentar simular
+fluidos? Expande bem isso. Fale disso principalmente no inicio do cap
+3.
+
+- expanda a secao Entendimento do Problema
+
+- nao entendi a secao Relação entre as abordagens
+
+- coloque algum texto antes da secao 4.1. Explique tambem o trabalho
+de descoberta de forcas que sao necessarias para simular fluidos, etc,
+etc.
+
+- em 2.1, tem que dar mais exemplos, figuras do uso original de
+steering behaviors. Veja o meu material de aula
+
+- arrumar o texto da secao 4.1.1. Explicar tambem o que acontece se
+nao houver gravidade. Aproveite a complexidade do problema para
+enriquecer o trabalho.
+
+- proporcional ao inverso da distância ao quadrado  - coloque formulas
+sempre que possivel
+
+- na forca de separacao, depois tem que comentar na abordagem de
+separacao por colisao fisica. Um particula nao pode entrar dentro da
+outra.
+
+- tu tem que mostrar - provar - o calculo da entropia.
