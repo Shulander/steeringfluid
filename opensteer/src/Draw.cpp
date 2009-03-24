@@ -579,11 +579,12 @@ OpenSteer::drawBasic3dSphericalVehicle (const AbstractVehicle& vehicle,
     const Color color5 = color + Color(k, k, j);
 
 
-	glColor4f (1.0f, 1.0f, 1.0f, 0.2f);
+//	glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
+	glColor4f (p.x/50.0+0.5f, p.y/50.0+0.5f, p.z/50.0+0.5f, 1.0f);
 	glPushMatrix();
 		glTranslatef(p.x, p.y, p.z);
 		GLUquadric *sphere = gluNewQuadric();
-		gluSphere(sphere, 1, 10, 10);
+		gluSphere(sphere, 2, 10, 10);
 //		std::cout << p.x << p.y << p.z << std::endl;
 	glPopMatrix();
 

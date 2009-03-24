@@ -68,6 +68,11 @@ namespace {
     typedef OpenSteer::AbstractProximityDatabase<AbstractVehicle*> ProximityDatabase;
     typedef OpenSteer::AbstractTokenForProximityDatabase<AbstractVehicle*> ProximityToken;
 
+	float separationTotal = 0.0f;
+	float cohesionTotal = 0.0f;
+	float alignmentTotal = 0.0f;
+	float gravityTotal = 0.0f;
+
 
     // ----------------------------------------------------------------------------
 
@@ -137,22 +142,25 @@ namespace {
         // per frame simulation update
         void update (const float currentTime, const float elapsedTime)
         {
-            OPENSTEER_UNUSED_PARAMETER(currentTime);
-            
-            // steer to flock and avoid obstacles if any
-            applySteeringForce (steerToFlock (), elapsedTime);
+			OPENSTEER_UNUSED_PARAMETER(currentTime);
+
+			// steer to flock and avoid obstacles if any
+			applySteeringForce (steerToFlock (), elapsedTime);            
 
 			if(smoothedPosition().y < -10 ) {
 				//adicionar força contraria aqui ;)
 				float modificador = (smoothedPosition().y + 9)/10.0;
 				applySteeringForce (velocity()* modificador, elapsedTime);
+//				Vec3 atualForward = forward();
+//				setForward(atualForward.x, atualForward.y*-modificador, atualForward.z);
 			} else {
 				applySteeringForce (gravity (), elapsedTime);
+				gravityTotal += gravity ().length();
 			}
 
 //			setSpeed(speed()*0.9f);
 
-            // wrap around to contrain boid within the spherical boundary
+            // wrap around to constrain boid within the spherical boundary
             sphericalWrapAround ();
 
             // notify proximity database that our position has changed
@@ -174,15 +182,15 @@ namespace {
             const Vec3 avoidance = steerToAvoidObstacles (2.0f, obstacles);
             if (avoidance != Vec3::zero) return avoidance;
 
-            const float separationRadius =  10.0f;
+            const float separationRadius =  5.0f;
             const float separationAngle  = -1.0f;
-            const float separationWeight =  50.0f;
+            const float separationWeight =  30.0f;
 
-            const float alignmentRadius = 12.5f;
+            const float alignmentRadius = 7.5f;
             const float alignmentAngle  = -1.0f;
-            const float alignmentWeight = 5.7f;
+            const float alignmentWeight = 1.0f;
 
-            const float cohesionRadius = 15.0f;
+            const float cohesionRadius = 9.0f;
             const float cohesionAngle  = -1.0f;
             const float cohesionWeight = 1.8f;
 
@@ -205,26 +213,32 @@ namespace {
             // determine each of the three component behaviors of flocking
             const Vec3 separation = steerForSeparation (separationRadius,
                                                         separationAngle,
-                                                        neighbors);
-			const Vec3 alignment  = Vec3::zero; //steerForAlignment  (alignmentRadius,
-                                                //        alignmentAngle,
-                                                //        neighbors);
+														neighbors);
+			const Vec3 alignment  =  /* Vec3::zero; */  steerForAlignment  (alignmentRadius, 
+														alignmentAngle,
+														neighbors);
             const Vec3 cohesion   = steerForCohesion   (cohesionRadius,
                                                         cohesionAngle,
                                                         neighbors);
 
-			if(separation.length()> 5) { printf("X"); }
-			if(separation.length()< 0.2) { printf("x"); }
             // apply weights to components (save in variables for annotation)
-            const Vec3 separationW = separation * separationWeight; //separation.truncateLength(separationWeight);
-            const Vec3 alignmentW = alignment * alignmentWeight;
-            const Vec3 cohesionW = cohesion.truncateLength(cohesionWeight);//cohesion * cohesionWeight;
+            Vec3 separationW = separation * separationWeight; //separation.truncateLength(separationWeight);
+			Vec3 alignmentW = (separation.length()< 0.1)? alignment  * alignmentWeight : Vec3::zero;
+            Vec3 cohesionW = (alignment.length()< 0.1)?cohesion.truncateLength(cohesionWeight): Vec3::zero;//cohesion * cohesionWeight;
 
+//			separationW = (separationW.length()>5.0?separationW:Vec3::zero);
+//			alignmentW = (alignmentW.length()>0.2?alignmentW:Vec3::zero);
+//			cohesionW = (cohesionW.length()>2.0?cohesionW:Vec3::zero);
             // annotation
             // const float s = 0.1;
-            // annotationLine (position, position + (separationW * s), gRed);
-            // annotationLine (position, position + (alignmentW  * s), gOrange);
-            // annotationLine (position, position + (cohesionW   * s), gYellow);
+//             annotationLine (position, position + (separationW * s), gRed);
+//             annotationLine (position, position + (alignmentW  * s), gOrange);
+//             annotationLine (position, position + (cohesionW   * s), gYellow);
+
+
+			separationTotal += separationW.length();
+			cohesionTotal += separationW.length();
+			alignmentTotal += alignmentW.length();
 
             return (separationW + alignmentW + cohesionW);
         }
@@ -392,6 +406,8 @@ namespace {
             {
                 (**i).update (currentTime, elapsedTime);
             }
+			printf("sep: %.2f\tcoe: %.2f\tali: %.2f\tgra: %.2f\n", separationTotal, cohesionTotal, alignmentTotal, gravityTotal);
+			separationTotal = cohesionTotal = alignmentTotal = gravityTotal = 0.0f;
         }
 
         void redraw (const float currentTime, const float elapsedTime)
