@@ -195,8 +195,16 @@ OpenSteer::SimpleVehicle::applySteeringForce (const Vec3& force,
     // update Speed
     setSpeed (newVelocity.length());
 
+	Vec3 newPosition = (position() + (newVelocity * elapsedTime));
+	if(newPosition.y < -20 ) {
+		newVelocity.y = -newVelocity.y;
+		newVelocity *= 0.90; // atrito com o fundo
+		newPosition = (position() + (newVelocity * elapsedTime));
+	} else {
+	}
+
     // Euler integrate (per frame) velocity into position
-    setPosition (position() + (newVelocity * elapsedTime));
+    setPosition (newPosition);
 
     // regenerate local space (by default: align vehicle's forward axis with
     // new velocity, but this behavior may be overridden by derived classes.)

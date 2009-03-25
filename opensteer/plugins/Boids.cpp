@@ -147,16 +147,16 @@ namespace {
 			// steer to flock and avoid obstacles if any
 			applySteeringForce (steerToFlock (), elapsedTime);            
 
-			if(smoothedPosition().y < -10 ) {
+/*			if(smoothedPosition().y < -10 ) {
 				//adicionar força contraria aqui ;)
 				float modificador = (smoothedPosition().y + 9)/10.0;
 				applySteeringForce (velocity()* modificador, elapsedTime);
 //				Vec3 atualForward = forward();
 //				setForward(atualForward.x, atualForward.y*-modificador, atualForward.z);
 			} else {
-				applySteeringForce (gravity (), elapsedTime);
-				gravityTotal += gravity ().length();
-			}
+			} */
+			applySteeringForce (gravity (), elapsedTime);
+			gravityTotal += gravity ().length();
 
 //			setSpeed(speed()*0.9f);
 
@@ -214,9 +214,9 @@ namespace {
             const Vec3 separation = steerForSeparation (separationRadius,
                                                         separationAngle,
 														neighbors);
-			const Vec3 alignment  =  /* Vec3::zero; */  steerForAlignment  (alignmentRadius, 
+			const Vec3 alignment  =  Vec3::zero;  /* steerForAlignment  (alignmentRadius, 
 														alignmentAngle,
-														neighbors);
+														neighbors); */
             const Vec3 cohesion   = steerForCohesion   (cohesionRadius,
                                                         cohesionAngle,
                                                         neighbors);
