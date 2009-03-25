@@ -822,7 +822,7 @@ steerForSeparation (const float maxDistance,
             // to normalize, divided another time to get 1/d falloff)
             const Vec3 offset = (**otherVehicle).position() - position();
             const float distanceSquared = offset.dot(offset);
-            steering += (offset / -distanceSquared);
+            steering += (offset / -distanceSquared);//*((**otherVehicle).speed()/(**otherVehicle).maxSpeed());
 
             // count neighbors
             ++neighbors;
@@ -838,7 +838,7 @@ steerForSeparation (const float maxDistance,
         steering = steering.normalize();
     }
     */
-//    steering = steering.normalize();
+//    steering = steering.normalize(;)
     
     return steering;
 }
@@ -902,7 +902,7 @@ steerForCohesion (const float maxDistance,
         if (predictNearestApproachTime (**otherVehicle) < 0 && inBoidNeighborhood (**otherVehicle, radius()*3, maxDistance, cosMaxAngle))
         {
             // accumulate sum of neighbor's positions
-            steering += (**otherVehicle).position();
+            steering += (**otherVehicle).position();//*((**otherVehicle).speed()/(**otherVehicle).maxSpeed());
 
             // count neighbors
             neighbors++;
