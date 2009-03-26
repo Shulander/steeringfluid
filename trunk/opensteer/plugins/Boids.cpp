@@ -112,10 +112,10 @@ namespace {
             SimpleVehicle::reset ();
 
             // steering force is clipped to this magnitude
-            setMaxForce (27);
+            setMaxForce (50);
 
             // velocity is clipped to this magnitude
-            setMaxSpeed (9);
+            setMaxSpeed (20);
 
             // initial slow speed
             setSpeed (maxSpeed() * 0.3f);
@@ -179,8 +179,8 @@ namespace {
         {
             // avoid obstacles if needed
             // XXX this should probably be moved elsewhere
-            const Vec3 avoidance = steerToAvoidObstacles (2.0f, obstacles);
-            if (avoidance != Vec3::zero) return avoidance;
+//            const Vec3 avoidance = steerToAvoidObstacles (2.0f, obstacles);
+//            if (avoidance != Vec3::zero) return avoidance;
 
             const float separationRadius =  5.0f;
             const float separationAngle  = -1.0f;
@@ -192,7 +192,7 @@ namespace {
 
             const float cohesionRadius = 9.0f;
             const float cohesionAngle  = -1.0f;
-            const float cohesionWeight = 1.8f;
+            const float cohesionWeight = 10.8f;
 
             const float maxRadius = maxXXX (separationRadius,
                                             maxXXX (alignmentRadius,
@@ -379,7 +379,7 @@ namespace {
 
             // make default-sized flock
             population = 0;
-            for (int i = 0; i < 200; i++) addBoidToFlock ();
+            for (int i = 0; i < 5; i++) addBoidToFlock ();
 
             // initialize camera
             OpenSteerDemo::init3dCamera (*OpenSteerDemo::selectedVehicle);
@@ -396,6 +396,9 @@ namespace {
 
         void update (const float currentTime, const float elapsedTime)
         {
+			if(population<1000) {
+				for (int i = 0; i < 5; i++) addBoidToFlock ();
+			}
     #ifndef NO_LQ_BIN_STATS
             Boid::maxNeighbors = Boid::totalNeighbors = 0;
             Boid::minNeighbors = std::numeric_limits<int>::max();
@@ -406,7 +409,7 @@ namespace {
             {
                 (**i).update (currentTime, elapsedTime);
             }
-			printf("sep: %.2f\tcoe: %.2f\tali: %.2f\tgra: %.2f\n", separationTotal, cohesionTotal, alignmentTotal, gravityTotal);
+//			printf("sep: %.2f\tcoe: %.2f\tali: %.2f\tgra: %.2f\n", separationTotal, cohesionTotal, alignmentTotal, gravityTotal);
 			separationTotal = cohesionTotal = alignmentTotal = gravityTotal = 0.0f;
         }
 
@@ -535,8 +538,9 @@ namespace {
             case 1:  for(int i=0;i<50;i++) addBoidToFlock ();         break;
             case 2:  for(int i=0;i<50;i++) removeBoidFromFlock ();    break;
             case 3:  nextPD ();                 break;
-            case 4:  nextBoundaryCondition ();  break;
-            case 5:  printLQbinStats ();        break;
+			case 4:  nextBoundaryCondition ();  break;
+			case 5:  printLQbinStats ();        break;
+			case 6:  while(population>0) removeBoidFromFlock ();        break;
             }
 			std::cout << "key: "
                       << keyNumber << std::endl; 
@@ -569,8 +573,9 @@ namespace {
             OpenSteerDemo::printMessage (message);
             OpenSteerDemo::printMessage ("  F1     add a boid to the flock.");
             OpenSteerDemo::printMessage ("  F2     remove a boid from the flock.");
-            OpenSteerDemo::printMessage ("  F3     use next proximity database.");
-            OpenSteerDemo::printMessage ("  F4     next flock boundary condition.");
+			OpenSteerDemo::printMessage ("  F3     use next proximity database.");
+			OpenSteerDemo::printMessage ("  F4     next flock boundary condition.");
+			OpenSteerDemo::printMessage ("  F6     restart simulation.");
             OpenSteerDemo::printMessage ("");
         }
 
@@ -578,6 +583,14 @@ namespace {
         {
             population++;
             Boid* boid = new Boid (*pd);
+			Vec3 forward,pos;
+			forward.set(-1,-1,1);
+			forward.normalize();
+			boid->setForward(forward.x, forward.y, forward.z);
+
+//			pos.set(-15+(rand()%5), 20-(rand()%5),-15+(rand()%5));
+			pos.set(0+(rand()%5), 40-(rand()%5),0+(rand()%5));
+			boid->setPosition(pos.x, pos.y, pos.z);
             flock.push_back (boid);
             if (population == 1) OpenSteerDemo::selectedVehicle = boid;
         }
