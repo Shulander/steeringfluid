@@ -198,23 +198,19 @@ OpenSteer::SimpleVehicle::applySteeringForce (const Vec3& force,
 	Vec3 newPosition = (position() + (newVelocity * elapsedTime));
 	if(newPosition.y < -20 ) {
 		newVelocity.y = -newVelocity.y;
-		newVelocity *= 0.90; // atrito com o fundo
-	}
-	if(newPosition.x < -20 ) {
+		newVelocity *= 0.9; // atrito com o fundo
+	} else if(newPosition.x < -20 ) {
 		newVelocity.x = -newVelocity.x;
-		newVelocity *= 0.90; // atrito com o fundo
-	}
-	if(newPosition.x > 20 ) {
+		newVelocity *= 0.95; // atrito com a parede
+	} else if(newPosition.x > 20 ) {
 		newVelocity.x = -newVelocity.x;
-		newVelocity *= 0.90; // atrito com o fundo
-	}
-	if(newPosition.z < -20 ) {
+		newVelocity *= 0.95; // atrito com a parede
+	} else if(newPosition.z < -20 ) {
 		newVelocity.z = -newVelocity.z;
-		newVelocity *= 0.90; // atrito com o fundo
-	}
-	if(newPosition.z > 20 ) {
+		newVelocity *= 0.95; // atrito com a parede
+	} else if(newPosition.z > 20 ) {
 		newVelocity.z = -newVelocity.z;
-		newVelocity *= 0.90; // atrito com o fundo
+		newVelocity *= 0.95; // atrito com a parede
 	}
 
 	newPosition = (position() + (newVelocity * elapsedTime));

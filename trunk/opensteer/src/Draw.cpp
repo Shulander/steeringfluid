@@ -579,22 +579,30 @@ OpenSteer::drawBasic3dSphericalVehicle (const AbstractVehicle& vehicle,
     const Color color5 = color + Color(k, k, j);
 
 
-//	glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
-	glColor4f (p.x/50.0+0.5f, p.y/50.0+0.5f, p.z/50.0+0.5f, 1.0f);
+	// display list
 	glPushMatrix();
-		glTranslatef(p.x, p.y, p.z);
-		GLUquadric *sphere = gluNewQuadric();
-		gluSphere(sphere, 2, 10, 10);
-//		std::cout << p.x << p.y << p.z << std::endl;
+	glTranslated(p.x, p.y, p.z);
+	glColor4f (0.0f, p.y/50.0+0.5f, 1.0f, 1.0f);
+	glScalef(2, 2, 2);
+	DisplayListElements::desenhaEsferasDisplayList(DisplayListElements::SOLID, 1);
 	glPopMatrix();
 
+//	glColor4f (0.0f, p.y/50.0+0.5f, 1.0f, 1.0f);
+////	glColor4f (p.x/50.0+0.5f, p.y/50.0+0.5f, p.z/50.0+0.5f, 1.0f);
+//	glPushMatrix();
+//		glTranslatef(p.x, p.y, p.z);
+//		GLUquadric *sphere = gluNewQuadric();
+//		gluSphere(sphere, 2, 10, 10);
+////		std::cout << p.x << p.y << p.z << std::endl;
+//	glPopMatrix();
+
 	// draw body
-    iDrawTriangle (nose,  side1,  top,    color1);  // top, side 1
-    iDrawTriangle (nose,  top,    side2,  color2);  // top, side 2
-    iDrawTriangle (nose,  bottom, side1,  color3);  // bottom, side 1
-    iDrawTriangle (nose,  side2,  bottom, color4);  // bottom, side 2
-    iDrawTriangle (side1, side2,  top,    color5);  // top back
-    iDrawTriangle (side2, side1,  bottom, color5);  // bottom back
+    //iDrawTriangle (nose,  side1,  top,    color1);  // top, side 1
+    //iDrawTriangle (nose,  top,    side2,  color2);  // top, side 2
+    //iDrawTriangle (nose,  bottom, side1,  color3);  // bottom, side 1
+    //iDrawTriangle (nose,  side2,  bottom, color4);  // bottom, side 2
+    //iDrawTriangle (side1, side2,  top,    color5);  // top back
+    //iDrawTriangle (side2, side1,  bottom, color5);  // bottom back
 }
 
 
