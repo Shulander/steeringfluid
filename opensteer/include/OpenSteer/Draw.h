@@ -56,6 +56,7 @@
 #include "OpenSteer/Color.h"
 #include "OpenSteer/AbstractVehicle.h"
 #include "OpenSteer/Obstacle.h"
+#include "OpenSteer/DisplayListElements.h"
 
 
 namespace OpenSteer {

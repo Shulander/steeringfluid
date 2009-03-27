@@ -397,7 +397,7 @@ namespace {
         void update (const float currentTime, const float elapsedTime)
         {
 			if(population<1000) {
-				for (int i = 0; i < 5; i++) addBoidToFlock ();
+				for (int i = 0; i < 4; i++) addBoidToFlock ();
 			}
     #ifndef NO_LQ_BIN_STATS
             Boid::maxNeighbors = Boid::totalNeighbors = 0;
@@ -589,7 +589,7 @@ namespace {
 			boid->setForward(forward.x, forward.y, forward.z);
 
 //			pos.set(-15+(rand()%5), 20-(rand()%5),-15+(rand()%5));
-			pos.set(0+(rand()%5), 40-(rand()%5),0+(rand()%5));
+			pos.set(0+(rand()%4), 40-(rand()%4),0+(rand()%4));
 			boid->setPosition(pos.x, pos.y, pos.z);
             flock.push_back (boid);
             if (population == 1) OpenSteerDemo::selectedVehicle = boid;
