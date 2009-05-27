@@ -3,12 +3,20 @@
 
 \section{Definição de forças}
 \subsection{Gravidade}
-Para simulação de grupo de elementos em um sistema de steering behaviors a gravidade no mundo geralmente não é relevante para o resultado esperado, porém em uma representação gráfica de fluídos a gravidade é importante para o correto fluxo dos elementos e da representação correta dos elementos.
-A gravidade foi implementada como uma força que age constantemente sobre todos os elementos do sistema. Essa força faz com que os elementos formam um fluxo em direção em que força está atuando.
+Para simulação de grupo de elementos em um sistema de {\it steering behaviors} a força gravitacional no mundo usualmente não é relevante para o resultado esperado, porém em uma representação gráfica de fluidos a gravidade é necessária e sua contribuição para a representação de fluidos importante para para a obtenção do fluxo e representação dos elementos corretamente.
+A gravidade foi implementada como uma força que age constantemente sobre todos os elementos do sistema. Essa força faz com que os elementos formem um fluxo na direção de atuação da força. A figura \ref{fig:motion_behaviors_hierarchy} representa a implementação da gravidade no sistema.
+\begin{figure}
+\centering
+\resizebox{10cm}{!}{\includegraphics{figuras/implementacao_gravity.png}}
+\caption{Implementação: gravidade}
+\label{fig:implementacao_gravity}
+\end{figure}
+
+A gravidade é aplicada a cada atualização do elemento, a qual é aplicada como um simples vetor força em direção ao eixo Y negativo.
 
 \subsection{Coesão}
 A coesão consiste em uma região, geralmente mais externa, na qual os elementos tendem a se aproximar do centro do grupo.
-A coesão entre as partículas faz com que as mesmas tendam a não se separar do grupo, esse comportamento é esperado na representação de fluídos uma vez que as partículas tendem a manter-se unidas na simulação.
+A coesão entre as partículas faz com que as mesmas tendam a não se separar do grupo de vizinhança. Esse agrupamento é esperado entre os elementos que compõem a simulação, pois o arrasto ou movimentação de um grupo de partículas faz com que as partículas em sua volta se desloquem em forma de torrente causado pelo arrasto dos elementos em movimento.
 Em nossa implementação estudamos a força de coesão nas seguintes condições:
 \begin{itemize}
 \item Comportamento original: os elementos se atraem com igual força não importando em qual região de vizinhança o elemento se encontra, nesse caso em especial o comportamento de agrupamento dos elementos funcionava conforme esperado, porém com a força de separação (verificar a implementação da separação ~\ref{sec:impl_separacao}) adicionando força de forma exponencial ao inverso da distância entre os elementos o sistema tende a não se estabilizar.
@@ -20,8 +28,8 @@ Além das modificações comportamental dos {\it steering behaviors} citadas, foram
 \subsection{Separação}
 \label{sec:impl_separacao}
 A força de separação tende a afastar os elementos quando internos à região de separação.
-A força de separação é um elemento importante na simulação de fluídos, a mesma vem em substituição da transferência de energia pela colisão dos elementos na simulação física de partículas. Como no steering behaviors os elementos não trabalham com colisão é necessária uma força capaz de separar os elementos quando muito próximos ou quando em rota de colisão. Essa força é diretamente proporcional ao inverso da distância ao quadrado fazendo com que a mesma cresça rapidamente ao se aproximar de outro elemento, resultando na separação de ambos os elementos.
-A região de atuação da força de separação corresponde com a distância esperada em que as partículas permaneçam separadas uma das outras, analogamente podemos relacionar com a densidade do fluído, pois quanto mais próximas as partículas se estabilizarem mais difícil sera desloca-las na interação com outros elementos, dado que a força de repulsão do grupo a um elemento novo é maior devido ao somatório das forças resultantes do grupo. 
+A força de separação é um elemento importante na simulação de fluidos, a mesma vem em substituição da transferência de energia pela colisão dos elementos na simulação física de partículas. Como no steering behaviors os elementos não trabalham com colisão é necessária uma força capaz de separar os elementos quando muito próximos ou quando em rota de colisão. Essa força é diretamente proporcional ao inverso da distância ao quadrado fazendo com que a mesma cresça rapidamente ao se aproximar de outro elemento, resultando na separação de ambos os elementos.
+A região de atuação da força de separação corresponde com a distância esperada em que as partículas permaneçam separadas uma das outras, analogamente podemos relacionar com a densidade do fluido, pois quanto mais próximas as partículas se estabilizarem mais difícil sera desloca-las na interação com outros elementos, dado que a força de repulsão do grupo a um elemento novo é maior devido ao somatório das forças resultantes do grupo. 
 
 \subsection{Alinhamento}
 A força de alinhamento direciona os elementos a se alinharem com o grupo que pertence a região de alinhamento. Para os primeiros testes a mesma não esta sendo utilizada, pois para o comportamento das partículas o alinhamento das mesmas não representa uma contribuição importante para o sistema.
