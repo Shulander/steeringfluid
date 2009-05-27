@@ -1,3 +1,11 @@
+- Variavel de somatorio das forças totais agindo no sistema 
+
+- Plotar graficos de forças / tempo (repulsao, atrasao)
+
+- gravidade e separação / distancia entre particulas não pode ser maior que 10%
+
+- falar sobre o problema de compressao que ocorre pelo acumulo de forças
+
 observacoes
 
 - tem que colocar imagens de trabalhos relacionados e falar mais das
@@ -42,3 +50,5 @@ separacao por colisao fisica. Um particula nao pode entrar dentro da
 outra.
 
 - tu tem que mostrar - provar - o calculo da entropia.
+
+2 semanas - texto com as essas modificacoes e analises da evolução.
